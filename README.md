@@ -33,7 +33,6 @@
     Backend                   : Node.js avec Express.js
     Base de données           :	MongoDB (via Mongoose)
     API	                      : REST API (communication entre frontend et backend)
-    Hébergement / Déploiement :	GitHub Pages (frontend) & Render / Railway (backend)
     Versioning	              : Git et GitHub
 
-Outils complémentaires : API REST, Fetch, gestion de formulaires et stockage local.
+
