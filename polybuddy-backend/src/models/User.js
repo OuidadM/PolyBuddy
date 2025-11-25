@@ -48,6 +48,12 @@ User.init(
       }
     },
 
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+      validate: { isEmail: { msg: 'Email invalide' } }
+    },
     nationalite: {
       type: DataTypes.STRING,
       validate: {
@@ -66,13 +72,6 @@ User.init(
       },
     },
 
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
-      validate: { isEmail: { msg: 'Email invalide' } }
-    },
-
     role: {
       type: DataTypes.ENUM("student", "alumni", "admin"),
       allowNull: false
@@ -80,39 +79,38 @@ User.init(
 
     account_status: {
       type: DataTypes.ENUM("active", "pending", "suspended", "deleted"),
-      defaultValue: "pending",
+        defaultValue: "pending",
     },
 
     langue: {
       type: DataTypes.ENUM('fr', 'en'),
       defaultValue: 'fr'
     },
-
     gender: {
-      type: DataTypes.CHAR(1),
-      allowNull: true,
-      validate: {
-        isIn: {
-          args: [["M", "F", "O"]],
-          msg: "Le genre doit être 'M', 'F' ou 'O'."
+        type: DataTypes.CHAR(1),
+        allowNull: true,
+        validate: {
+          isIn: {
+            args: [["M", "F", "A"]],
+            msg: "Le genre doit être 'M', 'F' ou 'A'."
+          }
         }
-      }
-    },
-
+      },
+    
     addressId: {
       type: DataTypes.INTEGER,
-      references: { model: "addresses", key: "id" }
-    },
+      references: { model: "Addresses", key: "id" }
+      },
 
     bio: DataTypes.TEXT,
-
+  
     dateNaissance: {
       type: DataTypes.DATE,
       allowNull: true,
       validate: {
         isDate: { msg: 'La date de naissance doit être une date valide' },
         isBefore: {
-          args: [new Date().toISOString().split('T')[0]],
+          args: [new Date().toISOString().split('T')[0]], // la date doit être dans le passé
           msg: 'La date de naissance ne peut pas être dans le futur'
         }
       }
@@ -124,8 +122,10 @@ User.init(
     tableName: "users", 
     timestamps: true,
     defaultScope: { attributes: { exclude: ["passwordHash"] } },
-  }
-);
+  });
+
+User.belongsTo(Address, { foreignKey: "addressId" });
+Address.hasMany(User, { foreignKey: "addressId" });
 
 User.belongsTo(Address, { foreignKey: "addressId" });
 Address.hasMany(User, { foreignKey: "addressId" });

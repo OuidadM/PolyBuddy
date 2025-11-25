@@ -1,5 +1,5 @@
-const { DataTypes, Model } = require("sequelize");
-const { sequelize } = require("../config/db");
+const { DataTypes, Model } = require('sequelize');
+const sequelize = require('../config/db');
 const User = require("./User");
 const SPECIALITE = require("../enums/specialiteEnum");
 const interestsEnum = require("../enums/interestsEnum");
@@ -53,7 +53,7 @@ Student.init(
           }
           for (const item of value) {
             if (!allowed.includes(item)) {
-              throw new Error(`Centre d’intérêt invalide : ${item}`);
+              throw new Error(`Centre d'intérêt invalide : ${item}`);
             }
           }
         }
