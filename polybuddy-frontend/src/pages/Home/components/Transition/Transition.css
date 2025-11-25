@@ -1,0 +1,10 @@
+/* TRANSITION */
+.transition {
+  display: flex;
+  justify-content: center;
+  margin: 40px 0;
+}
+
+.transition img {
+  height: 150px;
+}
