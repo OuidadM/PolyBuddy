@@ -1,0 +1,51 @@
+/* Outer container */
+.message-input-container {
+  padding: 0 12px 10px 12px;
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+}
+
+/* Input box wrapper */
+.message-input-box {
+  flex: 1;
+  background-color: #e0e0e0;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+}
+
+/* Icon buttons inside the input box */
+.message-input-box .input-icon svg {
+  color: var(--mui-text-primary);
+}
+
+
+/* TextField styling override */
+.message-textfield .MuiInputBase-root {
+  margin: 5px 10px;
+  font-size: 18px;
+  font-weight: 300;
+  letter-spacing: 1px;
+  color: var(--mui-text-primary);
+}
+
+.message-textfield .MuiInputBase-root input::placeholder {
+  opacity: 1;
+  color: var(--mui-text-primary);
+}
+
+.message-textfield .MuiInputBase-root:before,
+.message-textfield .MuiInputBase-root:after {
+  display: none;
+}
+
+.message-mic-btn.MuiButtonBase-root {
+  background-color: var(--mui-secondary-main);
+  border-radius: 14px;
+}
+
+.message-mic-btn svg.MuiSvgIcon-root {
+  color: white;
+}
