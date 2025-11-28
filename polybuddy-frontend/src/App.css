@@ -1,50 +1,38 @@
-*:root {
-  --primary-color: #2ba8fb;
-  --on-primary-color: white;
-  --primary-color-light: #6fc5ff;
-  --background-color: #1d3039;
-  --text-color: white;
-  --mui-primary-main: #019EE6;
-  --mui-secondary-main:#1D3039;
+.App {
+  text-align: center;
 }
 
-/* GENERAL */
-body,
-html,
-.page {
-  margin: 0;
-  padding: 0;
-  background: var(--background-color);
-  font-family: Nunito, sans-serif;
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
   color: white;
 }
 
-p,
-h3 {
-  margin-block: 0;
+.App-link {
+  color: #61dafb;
 }
 
-.btn {
-  padding: 12.5px 30px;
-  border: 0;
-  border-radius: 100px;
-  background-color: var(--primary-color);
-  color: var(--on-primary-color);
-  font-weight: Bold;
-  transition: all 0.5s;
-  -webkit-transition: all 0.5s;
-}
-
-.btn:hover {
-  background-color: var(--primary-color-light);
-  box-shadow: 0 0 20px var(--primary-color-light);
-  transform: scale(1.1);
-}
-
-.btn:active {
-  background-color: var(--primary-color);
-  transition: all 0.25s;
-  -webkit-transition: all 0.25s;
-  box-shadow: none;
-  transform: scale(0.98);
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
