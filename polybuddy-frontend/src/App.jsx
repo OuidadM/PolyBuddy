@@ -1,12 +1,25 @@
+import React from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import './App.css';
-import Home from './pages/Home/components/Home/index.jsx'; 
-import Main from './pages/Main/components/Messaging/Messaging.jsx';
+
+import LandingPage from './pages/LandingPage/index.jsx'; 
+import Chat from './pages/Chat/index.jsx';
+import Feed from './pages/Feed/index.jsx';
+import MainLayout from './pages/components/Layout/index.jsx';
 
 function App() {
   return (
     <div className="App">
-      {/* <Main/> */}
-      <Home/>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+
+        <Route element={<MainLayout />}>
+           <Route path="/app" element={<Navigate to="/home" replace />} />
+           
+           <Route path="/home" element={<Feed />} />
+           <Route path="/chat" element={<Chat />} />
+        </Route>
+      </Routes>
     </div>
   );
 }

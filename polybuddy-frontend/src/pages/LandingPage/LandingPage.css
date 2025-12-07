@@ -1,0 +1,61 @@
+/* Main Page Container */
+.feed-container {
+  background-color: #EFF6FC;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+/* Navbar positioning */
+.feed-navbar-wrapper {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background-color: #EFF6FC; 
+}
+
+/* Flex container for Sidebar + Content */
+.feed-content {
+  display: flex;
+  flex-grow: 1;
+  padding: 20px;
+  gap: 30px; 
+  height: calc(100vh - 80px); /* Adjust based on navbar height */
+}
+
+/* Wrapper for Sidebar to keep it stable */
+.feed-sidebar-wrapper {
+  flex-shrink: 0;
+  width: auto; 
+}
+
+/* The area containing the Grid */
+.feed-grid-area {
+  flex-grow: 1;
+  overflow-y: auto; /* Scrollable area */
+  padding-right: 10px; 
+}
+
+/* The actual Grid Layout */
+.profiles-grid {
+  display: grid;
+  /* Responsive columns: roughly 260px wide each */
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 25px;
+  padding-bottom: 40px;
+}
+
+/* Custom Scrollbar for the feed area */
+.feed-grid-area::-webkit-scrollbar {
+  width: 8px;
+}
+
+.feed-grid-area::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.feed-grid-area::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1;
+  border-radius: 4px;
+}

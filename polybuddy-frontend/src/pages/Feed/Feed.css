@@ -1,0 +1,42 @@
+/* Main Container */
+.feed-main {
+  height: 100%; 
+  width: 100%;
+  display: flex;
+  flex-direction: column; 
+  overflow: hidden; 
+  gap: 20px;
+}
+
+/* Fixed Top Area */
+.feed-fixed-top {
+  flex-shrink: 0;
+}
+
+/* Scrollable Container */
+.feed-scroll-area {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+  padding-right: 8px; 
+  padding-bottom: 20px;
+}
+
+/* The Grid Layout */
+.profiles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); 
+  gap: 20px;
+}
+
+/* Custom Scrollbar Styling */
+.feed-scroll-area::-webkit-scrollbar {
+  width: 8px;
+}
+.feed-scroll-area::-webkit-scrollbar-track {
+  background: transparent;
+}
+.feed-scroll-area::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1;
+  border-radius: 4px;
+}
