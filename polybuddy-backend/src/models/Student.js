@@ -1,5 +1,5 @@
 const { DataTypes, Model } = require('sequelize');
-const sequelize = require('../config/db');
+const {sequelize} = require('../config/db');
 const User = require("./User");
 const SPECIALITE = require("../enums/specialiteEnum");
 const interestsEnum = require("../enums/interestsEnum");

@@ -99,7 +99,7 @@ User.init(
     
     addressId: {
       type: DataTypes.INTEGER,
-      references: { model: "Addresses", key: "id" }
+      references: { model: "addresses", key: "id" }
       },
 
     bio: DataTypes.TEXT,
@@ -124,8 +124,6 @@ User.init(
     defaultScope: { attributes: { exclude: ["passwordHash"] } },
   });
 
-User.belongsTo(Address, { foreignKey: "addressId" });
-Address.hasMany(User, { foreignKey: "addressId" });
 
 User.belongsTo(Address, { foreignKey: "addressId" });
 Address.hasMany(User, { foreignKey: "addressId" });
