@@ -51,7 +51,7 @@ Invitation.init(
     validate: {
       noSelfInvitation() {
         if (this.expediteurId === this.destinataireId) {
-          throw new Error("Un étudiant ne peut pas s’envoyer une invitation à lui-même");
+          throw new Error("Un étudiant ne peut pas s'envoyer une invitation à lui-même");
         }
       }
     }

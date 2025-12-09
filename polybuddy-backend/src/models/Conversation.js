@@ -1,6 +1,7 @@
 const { DataTypes, Model } = require("sequelize");
 const { sequelize } = require("../config/db");
-const User = require('./User');
+const Student = require('./Student');
+const Group = require('./Group');
 
 class Conversation extends Model {}
 
@@ -24,6 +25,26 @@ Conversation.init({
   modelName: 'Conversation',
   tableName: 'conversations'
 });
+
+Conversation.belongsToMany(Student, { 
+  through: "ConversationParticipants",
+  as: "participants",
+  foreignKey: "conversationId"
+});
+
+Student.belongsToMany(Conversation, { 
+  through: "ConversationParticipants",
+  as: "conversations",
+  foreignKey: "studentId"
+});
+
+
+Conversation.hasOne(Group, { 
+  foreignKey: "conversationId",
+  as: "groupDetails",
+  onDelete: "CASCADE"
+});
+
 
 const Message = require('./Message');  
 
