@@ -1,6 +1,6 @@
 const { DataTypes, Model } = require('sequelize');
 const sequelize = require('../config/sequelize');
-const User = require('./User');
+const Student = require('./Student');   
 
 class Message extends Model {}
 
@@ -19,7 +19,7 @@ Message.init({
   expediteurId: {
     type: DataTypes.UUID,
     allowNull: false,
-    references: { model: 'users', key: 'id' },
+    references: { model: 'students', key: 'id' }, 
     onDelete: 'CASCADE'
   },
   contenu: {
@@ -40,8 +40,9 @@ Message.init({
   tableName: 'messages'
 });
 
-Message.belongsTo(User, {foreignKey: 'expediteurId',as: 'expediteur'});
+// ================= Relations =================
 
-User.hasMany(Message, {foreignKey: 'expediteurId',as: 'messagesEnvoyes'});
+Message.belongsTo(Student, { foreignKey: 'expediteurId', as: 'expediteur' });
+Student.hasMany(Message, { foreignKey: 'expediteurId', as: 'messagesEnvoyes' });
 
 module.exports = Message;
