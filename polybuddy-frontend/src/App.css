@@ -1,0 +1,60 @@
+*:root {
+  --primary-color: #2ba8fb;
+  --on-primary-color: white;
+  --primary-color-light: #6fc5ff;
+  --background-color: #1d3039;
+  --text-color: white;
+  --mui-primary-main: #019EE6;
+  --mui-secondary-main:#1D3039;
+}
+
+/* GENERAL */
+body,
+html,
+.page {
+  margin: 0;
+  padding: 0;
+  background: var(--background-color);
+  font-family: Nunito, sans-serif;
+  color: white;
+}
+
+p,
+h3 {
+  margin-block: 0;
+}
+
+.btn {
+  padding: 12.5px 30px;
+  border: 0;
+  border-radius: 100px;
+  background-color: var(--primary-color);
+  color: var(--on-primary-color);
+  font-weight: Bold;
+  transition: all 0.5s;
+  -webkit-transition: all 0.5s;
+}
+
+.btn:hover {
+  background-color: var(--primary-color-light);
+  box-shadow: 0 0 20px var(--primary-color-light);
+  transform: scale(1.1);
+}
+
+.btn:active {
+  background-color: var(--primary-color);
+  transition: all 0.25s;
+  -webkit-transition: all 0.25s;
+  box-shadow: none;
+  transform: scale(0.98);
+}
+.search-bar.MuiPaper-root {
+  border-radius: 18px;
+  height: 48px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  overflow: hidden;
+  box-shadow: 0px 2px 4px 1px rgba(121, 197, 239, 0.18);
+}
