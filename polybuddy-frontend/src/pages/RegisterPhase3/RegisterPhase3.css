@@ -1,0 +1,136 @@
+/* ===== GLOBAL ===== */
+.acces-container {
+  height: 100vh;
+  width: 100%;
+  background: #1D3039;
+  display: flex;
+  align-items: flex-start;      /* IMPORTANT : comme RegisterPhase2 */
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  font-family: 'Nunito', sans-serif;
+  padding-top: 40px;            /* EXACTEMENT comme RegisterPhase2 */
+}
+
+/* Title */
+.top-title {
+  position: absolute;
+  top: 25px;
+  color: #A9D5E7;
+  font-size: 48px;
+  font-weight: 900;
+  z-index: 30;
+  text-align: center;
+}
+
+/* Background images */
+.bg-img {
+  position: absolute;
+  opacity: 0.12;
+  pointer-events: none;
+}
+
+.graduate {
+  width: 35%;
+  bottom: -20px;
+  right: -30px;
+  animation: float 6s ease-in-out infinite;
+}
+
+.vector {
+  width: 30%;
+  top: -50px;
+  left: -40px;
+  animation: rotateSlow 18s linear infinite;
+}
+
+/* Animations */
+@keyframes float {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+  100% { transform: translateY(0); }
+}
+
+@keyframes rotateSlow {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(10deg); }
+}
+
+/* Avatars — mêmes tailles et positions */
+.avatar {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.95;
+  animation: float 5s ease-in-out infinite;
+  z-index: 5;
+}
+
+.avatar-1 { width: 230px; left: 25%; top: 20%; transform: translateX(-50%); }
+.avatar-2 { width: 260px; right: 23%; top: 10%; }
+.avatar-3 { width: 300px; left: 20%; bottom: 3%; z-index: 6; }
+.avatar-4 { width: 260px; right: 20%; bottom: 15%; }
+.avatar-5 { width: 165px; left: 45%; top: 58%; transform: translateX(-50%); }
+.avatar-6 { width: 230px; right: 38%; bottom: -10%; opacity: 0.9; }
+
+/* ===== WHITE BOX (IDENTIQUE A RegisterPhase2) ===== */
+
+.acces-box {
+  width: 420px;                     /* même taille */
+  background: #eef6ff;
+  padding: 35px;                    /* même padding */
+  border-radius: 40px;
+  box-shadow: 0 0 35px rgba(255,255,255,0.18);
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 120px;                /* même position que RegisterPhase2 */
+}
+
+/* Input fields */
+.input-field {
+  padding: 14px;
+  border-radius: 10px;
+  border: 1px solid #c9c9c9;
+  font-size: 15px;
+  width: 100%;
+}
+
+/* Phone field */
+.phone-wrapper {
+  display: flex;
+  gap: 10px;
+}
+
+.phone-select {
+  width: 40%;
+  padding: 14px;
+  border-radius: 10px;
+  border: 1px solid #c9c9c9;
+  font-size: 15px;
+  background: white;
+}
+
+.phone-input {
+  flex: 1;
+}
+
+/* Button identical to RegisterPhase2 */
+.next-btn {
+  background: white;
+  color: #1D3039;
+  padding: 12px 26px;
+  border: 2px solid #1D3039;
+  border-radius: 14px;
+  font-size: 18px;
+  font-weight: 800;
+  cursor: pointer;
+  width: fit-content;
+  margin: 15px auto 0 auto;
+  transition: 0.25s;
+}
+
+.next-btn:hover {
+  background: #1D3039;
+  color: white;
+}

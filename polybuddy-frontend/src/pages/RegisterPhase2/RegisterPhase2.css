@@ -1,0 +1,163 @@
+/* ==== GLOBAL ==== */
+.create-container {
+  height: 100vh;
+  width: 100%;
+  background: #1D3039;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  font-family: 'Nunito', sans-serif;
+  padding-top: 40px;
+}
+
+/* Title */
+.create-title {
+  position: absolute;
+  top: 25px;
+  color: #A9D5E7;
+  font-size: 48px;
+  font-weight: 900;
+  z-index: 30;
+  text-align: center;
+}
+
+/* Background images */
+.bg-img {
+  position: absolute;
+  opacity: 0.12;
+  pointer-events: none;
+}
+
+.create-graduate {
+  width: 35%;
+  bottom: -20px;
+  right: -30px;
+  animation: float 6s ease-in-out infinite;
+}
+
+.create-vector {
+  width: 30%;
+  top: -50px;
+  left: -40px;
+  animation: rotateSlow 18s linear infinite;
+}
+
+/* Avatars */
+.create-avatar {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.95;
+  animation: float 5s ease-in-out infinite;
+  z-index: 5;
+}
+
+.create-avatar-top-left { width: 230px; left: 25%; top: 20%; transform: translateX(-50%); }
+.create-avatar-top-right { width: 260px; right: 23%; top: 10%; }
+.create-avatar-bottom-left { width: 300px; left: 20%; bottom: 3%; z-index: 6; }
+.create-avatar-bottom-right { width: 260px; right: 20%; bottom: 15%; }
+
+/* Form box */
+.form-card {
+  width: 420px;
+  background: #eef6ff;
+  padding: 35px;
+  border-radius: 40px;
+  box-shadow: 0 0 35px rgba(255,255,255,0.18);
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 120px;
+}
+
+/* Labels */
+label {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1D3039;
+}
+
+/* Inputs / selects */
+input, select {
+  width: 100%;
+  padding: 14px;
+  border-radius: 10px;
+  border: 1px solid #c9c9c9;
+  font-size: 15px;
+}
+
+/* Radios */
+.radio-group {
+  display: flex;
+  gap: 20px;
+}
+
+.radio-group label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+}
+
+/* Interests */
+.interests-box {
+  max-height: 160px;
+  overflow-y: auto;
+  padding: 12px;
+  border: 1px solid #c9c9c9;
+  border-radius: 10px;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Interests - version alignée propre */
+.interests-box {
+  max-height: 160px;
+  overflow-y: auto;
+  padding: 12px;
+  border: 1px solid #c9c9c9;
+  border-radius: 10px;
+  background: #fff;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.interest-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.interest-item input {
+  width: 18px;
+  height: 18px;
+}
+
+
+/* Submit btn */
+.submit-btn {
+  background: white;
+  color: #1D3039;
+  padding: 12px 26px;
+  border: 2px solid #1D3039;
+  border-radius: 14px;
+  font-size: 18px;
+  font-weight: 800;
+  cursor: pointer;
+  width: fit-content;
+  margin: 15px auto 0 auto;
+  transition: 0.25s;
+}
+
+.submit-btn:hover {
+  background: #1D3039;
+  color: white;
+}
