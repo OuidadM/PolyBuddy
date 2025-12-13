@@ -1,0 +1,255 @@
+/* GLOBAL LAYOUT */
+.login-container {
+  display: flex;
+  height: 100vh;
+  background: #1D3039;
+  position: relative;
+  overflow: hidden;
+  animation: fadeIn 0.9s ease-out;
+}
+
+/* Smooth page fade-in */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* LEFT SIDE */
+.left-side {
+  width: 40%;
+  height: 100%;
+  position: relative;
+  background: transparent;
+  overflow: visible;
+  z-index: 50;
+  animation: slideLeft 0.9s ease-out;
+}
+
+/* Left side appear animation */
+@keyframes slideLeft {
+  from { opacity: 0; transform: translateX(-30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+/* AVATARS */
+.avatar {
+  position: absolute;
+  border-radius: 50%;
+  z-index: 20;
+  animation: float 4s ease-in-out infinite;
+}
+
+/* fun floating animation */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-12px); }
+  100% { transform: translateY(0px); }
+}
+
+/* Individual avatar sizes + slight delays for variety */
+.avatar-orange {
+  height: 520px;
+  top: -40px;
+  right: -200px;
+  animation-delay: 0.4s;
+}
+
+.avatar-mauve {
+  width: 190px;
+  top: 330px;
+  left: 110px;
+  animation-delay: 0.8s;
+}
+
+.avatar-vert {
+  width: 150px;
+  bottom: 10px;
+  left: 60px;
+  animation-delay: 0.2s;
+}
+
+.avatar-saumon {
+  width: 340px;
+  bottom: 20px;
+  right: -150px;
+  animation-delay: 0.6s;
+}
+
+.avatar-violet {
+  width: 200px;
+  top: 20px;
+  left: 20px;
+  animation-delay: 1s;
+}
+
+/* RIGHT SIDE */
+.right-side {
+  width: 60%;
+  background: #e9f2fb;
+  border-top-left-radius: 120px;
+  border-bottom-left-radius: 120px;
+  padding-top: 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 10;
+  animation: slideRight 0.9s ease-out;
+}
+
+/* Right side slide animation */
+@keyframes slideRight {
+  from { opacity: 0; transform: translateX(30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.main-logo {
+  width: 160px;
+  margin-bottom: 20px;
+  animation: popIn 0.6s ease-out;
+}
+
+/* Logo pop animation */
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0.8); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* FORM */
+.form-box {
+  width: 65%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  animation: fadeIn 1.2s ease-out;
+}
+
+.input-field {
+  padding: 14px;
+  border: 1px solid #d0d0d0;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: 0.25s ease;
+}
+
+/* Inputs hover & focus effect */
+.input-field:focus {
+  border-color: #1D3039;
+  box-shadow: 0 0 8px #1d30396e;
+  outline: none;
+}
+
+.remember-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #4d4d4d;
+  font-size: 15px;
+}
+
+/* BUTTONS — identical */
+.login-btn,
+.signup-btn {
+  border: 2px solid #1D3039;
+  padding: 12px 28px;
+  border-radius: 8px;
+  background: transparent;
+  color: #1D3039;
+  cursor: pointer;
+  font-size: 17px;
+  transition: 0.25s ease;
+  width: fit-content;
+  align-self: center;
+  min-width: 180px;
+}
+
+/* Button hover fun effect */
+.login-btn:hover,
+.signup-btn:hover {
+  background: #1D3039;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.2);
+}
+
+.forgot,
+.noaccount {
+  text-align: center;
+  color: #4d4d4d;
+  font-size: 15px;
+  transition: 0.2s ease;
+}
+
+/* Hover subtle effect */
+.forgot:hover,
+.noaccount:hover {
+  color: #1D3039;
+  cursor: pointer;
+}
+
+/* SEPARATOR */
+.separator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  width: 100%;
+  margin: 10px 0;
+}
+
+.separator span {
+  font-size: 13px;
+  color: #7a7a7a;
+  font-weight: 500;
+  letter-spacing: 1px;
+}
+
+.separator::before,
+.separator::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #c9c9c9;
+  opacity: 0.6;
+}
+
+/* ============================= */
+/*          RESPONSIVE           */
+/* ============================= */
+
+@media (max-width: 1100px) {
+  .avatar-orange { height: 420px; right: -160px; }
+  .avatar-saumon { width: 260px; right: -120px; }
+}
+
+@media (max-width: 900px) {
+  .login-container {
+    flex-direction: column;
+  }
+
+  .left-side {
+    width: 100%;
+    height: 250px;
+  }
+
+  .right-side {
+    width: 100%;
+    border-radius: 0;
+  }
+
+  .form-box {
+    width: 85%;
+  }
+
+  .avatar-orange {
+    height: 300px;
+    right: -130px;
+  }
+
+  .avatar-mauve { top: 200px; }
+  .avatar-saumon { width: 200px; }
+}
+
+@media (max-width: 600px) {
+  .avatar { display: none; } /* On small phones → remove clutter */
+}
