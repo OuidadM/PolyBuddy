@@ -1,0 +1,11 @@
+/* NAVBAR */
+.navbar {
+  padding: 15px 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar img {
+  height: 50px;
+}

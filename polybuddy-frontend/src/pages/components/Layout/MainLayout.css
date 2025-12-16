@@ -1,0 +1,16 @@
+.app-container {
+  height: 96vh;
+  width: 98%;
+  background-color: #EFF6FC;
+  display: flex;
+  padding: 2vh 1vw;
+  gap: 20px;
+  overflow: hidden;
+}
+
+.content-area {
+  flex: 1;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+}

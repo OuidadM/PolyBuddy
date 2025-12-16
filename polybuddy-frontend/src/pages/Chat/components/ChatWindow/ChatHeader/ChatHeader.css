@@ -1,0 +1,37 @@
+.chat-header {
+  padding: 8px 14px;
+  border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Avatar */
+.chat-header-avatar {
+  border: none;
+}
+
+/* Text container */
+.chat-header-info {
+  flex: 1;
+}
+
+/* Name */
+.chat-header-name {
+  color: var(--mui-text-primary);
+  font-weight: bold !important;
+  margin: 0;
+}
+
+/* Status */
+.chat-header-status {
+  color: var(--mui-text-primary);
+  font-size: 10px;
+  margin: 0;
+}
+
+/* Icons */
+.chat-header-icon svg {
+  color: var(--mui-text-primary);
+}
+
