@@ -13,7 +13,7 @@ export default function Navbar() {
       {/* 3. On Click, go to /home (which loads the Feed) */}
       <button 
         className="btn" 
-        onClick={() => navigate('/home')}
+        onClick={() => navigate('/login')}
       >
         Connexion
       </button>
