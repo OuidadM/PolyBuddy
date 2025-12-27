@@ -83,8 +83,9 @@ User.init(
     },
 
     langue: {
-      type: DataTypes.ENUM('fr', 'en'),
-      defaultValue: 'fr'
+      type: DataTypes.ENUM("Français", "Anglais", "Arabe", "Espagnol",
+    "Allemand", "Italien", "Chinois", "Autre"),
+      defaultValue: "Français"
     },
     gender: {
         type: DataTypes.CHAR(1),

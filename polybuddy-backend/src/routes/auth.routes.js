@@ -1,8 +1,12 @@
 const express = require("express");
 const router = express.Router();
+const uploadJustificatif = require("../middlewares/uploadJustificatif");
+const authController = require("../controllers/auth.controller");
 
-router.get("/", (req, res) => {
-  res.send("Auth route OK");
-});
+router.post(
+  "/register",
+  uploadJustificatif.single("justificatif"),
+  authController.register
+);
 
 module.exports = router;

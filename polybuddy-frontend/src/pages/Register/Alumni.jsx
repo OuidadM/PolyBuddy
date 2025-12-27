@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./Student.css";
+import "./Alumni.css";
 import { useLocation, useNavigate } from "react-router-dom";
 
 // IMAGES
@@ -14,27 +14,28 @@ import Attach from "../Home/assets/Attach.png";
 // SERVICE
 import authService from "../../services/auth.service";
 
-export default function RegisterStudent() {
+export default function RegisterAlumni() {
   const navigate = useNavigate();
-  const { state: previousData } = useLocation();
+  const { state: previousData } = useLocation(); 
 
   /* =========================
      STATES
      ========================= */
-  const [niveau, setNiveau] = useState("");
-  const [emailUniv, setEmailUniv] = useState("");
+  const [graduationYear, setGraduationYear] = useState("");
+  const [position, setPosition] = useState("");
+  const [company, setCompany] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [justificatifFile, setJustificatifFile] = useState(null);
+  const [diplomaFile, setDiplomaFile] = useState(null);
 
-  const niveaux = [
-  { label: "PEIP1", value: 1 },
-  { label: "PEIP2", value: 2 },
-  { label: "3A", value: 3 },
-  { label: "4A", value: 4 },
-  { label: "5A", value: 5 }
-];
-
+  /* =========================
+     YEARS
+     ========================= */
+  const currentYear = new Date().getFullYear();
+  const years = [];
+  for (let y = currentYear; y >= 1980; y--) {
+    years.push(y);
+  }
 
   /* =========================
      FILE HANDLER
@@ -54,21 +55,30 @@ export default function RegisterStudent() {
       return;
     }
 
-    setJustificatifFile(file);
+    setDiplomaFile(file);
   };
 
   /* =========================
      SUBMIT
      ========================= */
   const handleSubmit = async () => {
-    const birthDate = previousData?.dateNaissance || "";
-
-    if (!niveau) {
-      alert("Veuillez sélectionner un niveau");
+    if (!graduationYear) {
+      alert("Veuillez renseigner l'année d'obtention du diplôme");
       return;
     }
 
-    // 🔐 Mot de passe
+    if (position.trim().length < 2) {
+      alert("Veuillez renseigner votre position");
+      return;
+    }
+
+    if (company.trim().length < 2) {
+      alert("Veuillez renseigner votre entreprise");
+      return;
+    }
+    
+    const birthDate = previousData?.dateNaissance || "";
+
     if (password.length < 8) {
       alert("Le mot de passe doit contenir au moins 8 caractères");
       return;
@@ -89,36 +99,31 @@ export default function RegisterStudent() {
       return;
     }
 
-    // 📎 Email OU justificatif obligatoire
-    if (!justificatifFile && !emailUniv.trim()) {
-      alert(
-        "Veuillez renseigner soit votre email universitaire, soit importer un justificatif"
-      );
+    if (!diplomaFile) {
+      alert("Veuillez importer votre diplôme");
       return;
     }
 
     /* =========================
-       PAYLOAD JSON
+       PAYLOAD FINAL
        ========================= */
     const payload = {
       ...previousData,
-      niveau,
-      pass: password,
-      mail_univ: emailUniv.trim() || null
+      pass:password,
+      annee_diplome:graduationYear,
+      position: position.trim(),
+      entreprise: company.trim(),
     };
 
-    /* =========================
-       MULTIPART DATA
-       ========================= */
-    const multipartData = new FormData();
-    multipartData.append(
-      "data",
-      JSON.stringify(payload)
-    );
+    console.log("📦 Données Alumni (JSON) :", payload);
+    console.log("📎 Fichier diplôme :", diplomaFile);
 
-    if (justificatifFile) {
-      multipartData.append("justificatif", justificatifFile);
-    }
+    /* =========================
+       FORM DATA (JSON + FILE)
+       ========================= */
+    const formData = new FormData();
+    formData.append("data", JSON.stringify(payload));
+    formData.append("justificatif", diplomaFile);
 
     try {
       const response = await authService.register(formData);
@@ -128,17 +133,19 @@ export default function RegisterStudent() {
         }
       });
     } catch (error) {
-          console.error("Erreur inscription :", error);
+      console.error("Erreur inscription :", error);
 
-          if (error?.error) {
-            alert(error.error);
-          } else {
-            alert("Une erreur est survenue. Veuillez réessayer.");
-          }
-      };
-    }
+      if (error?.error) {
+        alert(error.error);
+      } else {
+        alert("Une erreur est survenue. Veuillez réessayer.");
+      }
+}
+
+  };
+
   return (
-    <div className="register-page">
+    <div className="acces-container">
       <img src={Graduate} className="bg-img create-graduate" alt="" />
       <img src={Vector} className="bg-img create-vector" alt="" />
 
@@ -149,26 +156,32 @@ export default function RegisterStudent() {
       <img src={Rose} className="create-avatar create-avatar-bottom-left" alt="" />
       <img src={Mauve} className="create-avatar create-avatar-bottom-right" alt="" />
 
-      <div className="access-form">
+      <div className="acces-box">
         <select
-          value={niveau}
-          onChange={(e) => setNiveau(Number(e.target.value))}
+          className="input-field"
+          value={graduationYear}
+          onChange={(e) => setGraduationYear(e.target.value)}
         >
-          <option value="">-- Sélectionner votre niveau --</option>
-          {niveaux.map((n) => (
-            <option key={n.value} value={n.value}>
-              {n.label}
-            </option>
+          <option value="">Année d'obtention du diplôme</option>
+          {years.map((y) => (
+            <option key={y} value={y}>{y}</option>
           ))}
         </select>
 
+        <input
+          type="text"
+          className="input-field"
+          placeholder="Position"
+          value={position}
+          onChange={(e) => setPosition(e.target.value)}
+        />
 
         <input
-          type="email"
+          type="text"
           className="input-field"
-          placeholder="Email universitaire"
-          value={emailUniv}
-          onChange={(e) => setEmailUniv(e.target.value)}
+          placeholder="Entreprise"
+          value={company}
+          onChange={(e) => setCompany(e.target.value)}
         />
 
         <input
@@ -182,24 +195,20 @@ export default function RegisterStudent() {
         <input
           type="password"
           className="input-field"
-          placeholder="Confirmez le mot de passe"
+          placeholder="Confirmer le mot de passe"
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
         />
 
         <div className="separator-line">
           <div className="line"></div>
-          <span>OU</span>
+          <span>Justificatif requis</span>
           <div className="line"></div>
         </div>
 
         <label className="file-upload">
           <img src={Attach} className="attach-icon" alt="attach" />
-          <span>
-            {justificatifFile
-              ? justificatifFile.name
-              : "Importer votre lettre d'admission"}
-          </span>
+          <span>{diplomaFile ? diplomaFile.name : "Importer votre diplôme"}</span>
           <input type="file" hidden onChange={handleFileChange} />
         </label>
 
@@ -208,7 +217,7 @@ export default function RegisterStudent() {
         </p>
 
         <button className="next-btn" onClick={handleSubmit}>
-          Valider
+          Valider l'inscription
         </button>
       </div>
     </div>
