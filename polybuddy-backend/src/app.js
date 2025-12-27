@@ -4,8 +4,12 @@ const cors = require('cors');
 const authRoutes = require("./routes/auth.routes");
 const app = express();
 
+app.use(cors({
+  origin: "http://localhost:5173", // frontend exact
+  credentials: true                // cookies / auth
+}));
+
 app.use(express.json());
-app.use(cors());
 
 app.get("/", (req, res) => {
   res.send("App OK, DB sera testée au démarrage du serveur");

@@ -1,26 +1,21 @@
 /* ==== GLOBAL ==== */
 .create-container {
-  height: 100vh;
+  min-height: 100vh;              /* clé absolue */
   width: 100%;
   background: #1D3039;
   display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  position: relative;
-  overflow: hidden;
-  font-family: 'Nunito', sans-serif;
-  padding-top: 40px;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px 80px;
+  box-sizing: border-box;
 }
 
-/* Title */
-.create-title {
-  position: absolute;
-  top: 25px;
+/* TITLE */
+.register-title {
   color: #A9D5E7;
   font-size: 48px;
   font-weight: 900;
-  z-index: 30;
-  text-align: center;
+  margin-bottom: 40px;
 }
 
 /* Background images */
@@ -29,21 +24,18 @@
   opacity: 0.12;
   pointer-events: none;
 }
-
 .create-graduate {
   width: 35%;
   bottom: -20px;
   right: -30px;
   animation: float 6s ease-in-out infinite;
 }
-
 .create-vector {
   width: 30%;
   top: -50px;
   left: -40px;
   animation: rotateSlow 18s linear infinite;
 }
-
 /* Avatars */
 .create-avatar {
   position: absolute;
@@ -52,26 +44,37 @@
   animation: float 5s ease-in-out infinite;
   z-index: 5;
 }
-
 .create-avatar-top-left { width: 230px; left: 25%; top: 20%; transform: translateX(-50%); }
 .create-avatar-top-right { width: 260px; right: 23%; top: 10%; }
 .create-avatar-bottom-left { width: 300px; left: 20%; bottom: 3%; z-index: 6; }
 .create-avatar-bottom-right { width: 260px; right: 20%; bottom: 15%; }
 
-/* Form box */
-.form-card {
-  width: 420px;
-  background: #eef6ff;
-  padding: 35px;
-  border-radius: 40px;
-  box-shadow: 0 0 35px rgba(255,255,255,0.18);
-  z-index: 20;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  margin-top: 120px;
+/* Animations */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+  100% { transform: translateY(0px); }
 }
 
+@keyframes rotateSlow {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(10deg); }
+}
+
+/* Form box */
+.form-card 
+{
+  width: 100%;
+  max-width: 420px;
+  background: #eef6ff;
+  padding: 32px;
+  border-radius: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  color: #1D3039;
+  z-index: 20;
+}
 /* Labels */
 label {
   font-size: 15px;

@@ -10,7 +10,7 @@ export default function Clouds() {
       <img src={cloudsImage} alt="clouds" /> 
       <div className="cloud-frame">
         <h2>Rejoins nous</h2>
-        <button className="btn big-btn" onClick={() => navigate('/register')}>S'inscrire</button>
+        <button className="btn big-btn" onClick={() => navigate('/register/1')}>S'inscrire</button>
       </div>
     </div>
   );
