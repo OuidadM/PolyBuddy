@@ -1,0 +1,159 @@
+:root {
+  --primary-blue: #2563eb;
+  --bg-gray: #f3f4f6;
+  --green-btn: #4caf50;
+  --red-btn: #f44336;
+  --border-color: #e5e7eb;
+}
+body, html, .admin-page {
+  color: black;
+}
+.admin-container {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.admin-header h1 {
+  font-size: 1.2rem;
+  margin-bottom: 25px;
+  color: white;
+}
+
+.filter-tabs {
+  background: #e0e7ff;
+  display: inline-flex;
+  padding: 4px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.filter-tabs button {
+  border: none;
+  background: transparent;
+  padding: 8px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+.filter-tabs button.active {
+  background: var(--primary-color);
+  color: white;
+}
+
+.table-wrapper {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  overflow: hidden;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-table th {
+  background: #f9fafb;
+  padding: 15px;
+  font-size: 0.85rem;
+  color: #666;
+  border-bottom: 1px solid var(--border-color);
+  text-align: left;
+}
+
+.admin-table td {
+  padding: 12px 15px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.user-cell {
+  cursor: pointer;
+}
+
+.name-with-arrow {
+  font-weight: 600;
+  color: #333;
+}
+
+.badge {
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  background: #f3f4f6;
+  border: 1px solid #ddd;
+}
+
+.email-link {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+.action-btns {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-accept, .btn-refuse {
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+}
+
+.btn-accept { background: var(--green-btn); }
+.btn-refuse { background: var(--red-btn); }
+
+.icon-btn {
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.detail-row {
+  background: #f8fafc;
+}
+
+.details-content {
+  padding: 20px 40px;
+}
+
+.details-content ul {
+  list-style: none;
+  padding: 0;
+}
+
+.details-content li {
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+}
+
+/* Modale */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  background: white;
+  width: 500px;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.placeholder-doc {
+  height: 200px;
+  background: #eee;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+  border: 2px dashed #ccc;
+}
