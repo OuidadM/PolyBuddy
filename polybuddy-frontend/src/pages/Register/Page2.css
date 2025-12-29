@@ -1,0 +1,212 @@
+/* ===== GLOBAL ===== */
+.acces-container {
+  height: 100vh;
+  width: 100%;
+  background: #1D3039;
+  display: flex;
+  align-items: flex-start;      /* IMPORTANT : comme RegisterPhase2 */
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  font-family: 'Nunito', sans-serif;
+  padding-top: 40px;            /* EXACTEMENT comme RegisterPhase2 */
+}
+
+/* PAGE WRAPPER */
+.register-page {
+  min-height: 100vh;              /* clé absolue */
+  width: 100%;
+  background: #1D3039;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px 80px;
+  box-sizing: border-box;
+}
+/* FORM */
+.register-form {
+  width: 100%;
+  max-width: 420px;
+  background: #eef6ff;
+  padding: 32px;
+  border-radius: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  color: #1D3039;
+  z-index: 20;
+}
+/* TITLE */
+.register-title {
+  color: #A9D5E7;
+  font-size: 48px;
+  font-weight: 900;
+  margin-bottom: 40px;
+}
+
+/* Background images */
+.bg-img {
+  position: absolute;
+  opacity: 0.12;
+  pointer-events: none;
+}
+
+.graduate {
+  width: 35%;
+  bottom: -20px;
+  right: -30px;
+  animation: float 6s ease-in-out infinite;
+}
+
+.vector {
+  width: 30%;
+  top: -50px;
+  left: -40px;
+  animation: rotateSlow 18s linear infinite;
+}
+
+/* Animations */
+@keyframes float {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+  100% { transform: translateY(0); }
+}
+
+@keyframes rotateSlow {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(10deg); }
+}
+
+/* Background images */
+.bg-img {
+  position: absolute;
+  opacity: 0.12;
+  pointer-events: none;
+}
+.create-graduate {
+  width: 35%;
+  bottom: -20px;
+  right: -30px;
+  animation: float 6s ease-in-out infinite;
+}
+.create-vector {
+  width: 30%;
+  top: -50px;
+  left: -40px;
+  animation: rotateSlow 18s linear infinite;
+}
+/* Avatars */
+.create-avatar {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.95;
+  animation: float 5s ease-in-out infinite;
+  z-index: 5;
+}
+.create-avatar-top-left { width: 230px; left: 25%; top: 20%; transform: translateX(-50%); }
+.create-avatar-top-right { width: 260px; right: 23%; top: 10%; }
+.create-avatar-bottom-left { width: 300px; left: 20%; bottom: 3%; z-index: 6; }
+.create-avatar-bottom-right { width: 260px; right: 20%; bottom: 15%; }
+
+/* Animations */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+  100% { transform: translateY(0px); }
+}
+
+@keyframes rotateSlow {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(10deg); }
+}
+
+.acces-box {
+  width: 420px;                     /* même taille */
+  background: #eef6ff;
+  padding: 35px;                    /* même padding */
+  border-radius: 40px;
+  box-shadow: 0 0 35px rgba(255,255,255,0.18);
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 120px;   
+  position: relative;             /
+}
+
+/* Input fields */
+.input-field {
+  padding: 14px;
+  border-radius: 10px;
+  border: 1px solid #c9c9c9;
+  font-size: 15px;
+  width: 100%;
+}
+
+.phone-wrapper {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.phone-wrapper {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+/* INDICATIF — FORCÉ COMPACT */
+.phone-select {
+  width: 90px;                 
+  min-width: 90px;
+  max-width: 90px;
+
+  padding: 12px 6px;
+  border-radius: 10px;
+  border: 1px solid #c9c9c9;
+  font-size: 13px;
+  background: white;
+
+  text-align: center;
+  cursor: pointer;
+
+  box-sizing: border-box;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+/* Numéro prend TOUT */
+.phone-input {
+  flex: 1;
+  padding: 14px;
+  font-size: 15px;
+}
+
+
+
+/* Button identical to RegisterPhase2 */
+.next-btn {
+  background: white;
+  color: #1D3039;
+  padding: 12px 26px;
+  border: 2px solid #1D3039;
+  border-radius: 14px;
+  font-size: 18px;
+  font-weight: 800;
+  cursor: pointer;
+  width: fit-content;
+  margin: 15px auto 0 auto;
+  transition: 0.25s;
+}
+
+.next-btn:hover {
+  background: #1D3039;
+  color: white;
+}
+
+.form-zone {
+  position: relative;
+  z-index: 20;
+}
+

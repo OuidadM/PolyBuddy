@@ -1,3 +1,4 @@
+// src/config/db.js
 require("dotenv").config();
 const { Sequelize } = require("sequelize");
 
@@ -12,7 +13,7 @@ const sequelize = new Sequelize(
     dialectOptions: {
       ssl: {
         require: true,
-        rejectUnauthorized: false,
+        rejectUnauthorized: false, // Neon exige false
       },
     },
     logging: false,
@@ -22,10 +23,11 @@ const sequelize = new Sequelize(
 async function connectDB() {
   try {
     await sequelize.authenticate();
-    console.log("Connected to PostgreSQL (Neon) successfully");
+    console.log("✅ Connected to PostgreSQL (Neon) successfully");
 
     await sequelize.sync({ alter: true });
-    console.log("📦 Models synchronized");
+    console.log("Models synchronized");
+
   } catch (error) {
     console.error("Database connection failed:", error.message);
     process.exit(1);

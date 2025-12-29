@@ -2,7 +2,7 @@ import React from "react";
 import { Outlet } from "react-router-dom"; 
 import Box from "@mui/material/Box";
 import Sidebar from "../Sidebar"; // Make sure path to Sidebar is correct
-import { useAvatarGenerator } from "../../hooks/useAvatarGenerator"; 
+import { useAvatarGenerator } from "../../../hooks/useAvatarGenerator"; 
 import { avatarPrompts } from "../../data/avatarPrompts";
 import "./MainLayout.css"; // We will create this CSS next
 
