@@ -13,10 +13,10 @@ import Mauve from "../Home/assets/Mauve.png";
 export default function RegisterSuccess() {
   const navigate = useNavigate();
   const { state } = useLocation();
-
   const message =
     state?.message ||
     "Votre inscription a été enregistrée avec succès.";
+  const status = state?.status;
 
   return (
     <div className="register-success-page">
@@ -36,12 +36,21 @@ export default function RegisterSuccess() {
 
         <p>{message}</p>
 
-        <button
-          className="success-btn"
-          onClick={() => navigate("/login")}
-        >
-          Retour à l'accueil
-        </button>
+        {status === "active" ? (
+          <button
+            className="success-btn"
+            onClick={() => navigate("/login")}
+          >
+            Se connecter
+          </button>
+        ) : (
+          <button
+            className="success-btn"
+            onClick={() => navigate("/")}
+          >
+            Retour à l'accueil
+          </button>
+        )}
       </div>
     </div>
   );

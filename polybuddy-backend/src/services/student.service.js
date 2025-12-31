@@ -10,6 +10,8 @@ const Student = require("../models/Student");
 const Address = require("../models/Address");
 const { normalizeAddress } = require("../utils/addressNormalizer");
 
+const mailService = require("./mail.service");
+
 class StudentService {
 
   static async register(data) {
@@ -61,23 +63,18 @@ class StudentService {
     /** ===============================
      * 2️⃣ RECHERCHE STUDENT EXISTANT
      =============================== */
-
     let studentByNum = null;
     let studentByMail = null;
 
     if (num_etudiant) {
-      studentByNum = await Student.findOne({
-        where: { num_etudiant }
-      });
+      studentByNum = await Student.findOne({ where: { num_etudiant } });
     }
 
     if (mail_univ) {
-      studentByMail = await Student.findOne({
-        where: { mail_univ }
-      });
+      studentByMail = await Student.findOne({ where: { mail_univ } });
     }
 
-    // ❌ Les deux existent mais sur deux lignes différentes
+    // ❌ Num et mail existent mais pas la même personne
     if (
       studentByNum &&
       studentByMail &&
@@ -86,13 +83,24 @@ class StudentService {
       throw {
         status: 400,
         message:
-          "Le numéro étudiant et l’email universitaire n’appartiennent pas à la même personne."
+          "Le numéro étudiant et l'email universitaire n'appartiennent pas à la même personne."
       };
     }
 
-    // 👉 Student existant (via num OU mail)
-    const existingStudent = studentByNum || studentByMail;
+    console.log("studentByNum : ",studentByNum)
+    console.log("studentByNum : ",studentByNum)
 
+    // ❌ Mail existe mais pas de numéro correspondant
+    if (!studentByNum && studentByMail) {
+      throw {
+        status: 400,
+        message:
+          "Cet email universitaire est déjà utilisé. Veuillez vous connecter."
+      };
+    }
+
+    // ✅ Étudiant existant (même personne)
+    const existingStudent = studentByNum || studentByMail;
     /** ===============================
      * 3️⃣ VALIDATIONS GLOBALES
      =============================== */
@@ -162,9 +170,10 @@ class StudentService {
     let user;
     let student;
 
+    console.log("existingStudent : ",existingStudent)
     if (existingStudent) {
       /** ========= UPDATE ========= */
-
+      console.log("I am in existingStudent ")
       user = await User.findByPk(existingStudent.id);
 
       await user.update({
@@ -224,6 +233,7 @@ class StudentService {
       });
     }
 
+    await mailService.sendStudentPendingEmail(user);
     return { user, student };
   }
 }

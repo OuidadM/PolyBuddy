@@ -16,6 +16,11 @@ function loadTemplate(templateName, variables = {}) {
 }
 
 async function sendMail({ to, subject, html }) {
+  if (!to) {
+    console.warn("⚠️ Email non envoyé : destinataire manquant");
+    return;
+  }
+
   try {
     await transporter.sendMail({
       from: process.env.SMTP_FROM,
@@ -25,23 +30,24 @@ async function sendMail({ to, subject, html }) {
     });
   } catch (error) {
     console.error("❌ Erreur envoi email :", error.message);
-    // IMPORTANT : on ne throw PAS
   }
 }
 
-async function sendAlumniPendingEmail(user) {
-  const html = loadTemplate("alumniPending", {
+
+async function sendStudentPendingEmail(user) {
+  const html = loadTemplate("studentPending", {
     firstname: user.prenom,
+    role:user.role,
     frontUrl: process.env.FRONT_URL
   });
 
   await sendMail({
     to: user.email,
-    subject: "⏳ Inscription PolyBuddy en attente de validation",
+    subject: "Inscription PolyBuddy en attente de validation",
     html
   });
 }
 
 module.exports = {
-  sendAlumniPendingEmail
+  sendStudentPendingEmail
 };

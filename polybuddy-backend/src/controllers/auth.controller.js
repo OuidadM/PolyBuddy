@@ -72,6 +72,7 @@ exports.register = async (req, res) => {
       const alumni = await AlumniService.registerAlumni(alumniData);
       return res.status(201).json({
         success: true,
+        status: "pending",
         message: "Votre inscription a bien été prise en compte. Vous pourrez vous connecter après validation par un administrateur."
       });
     }
@@ -98,15 +99,18 @@ exports.register = async (req, res) => {
       pass,
       justificatif: file ? file.path : justificatif // optionnel
     };
-
+    console.log("Controller's log")
     const student = await StudentService.register(studentData);
-
+    
     return res.status(201).json({
       success: true,
-      message: student.verification_status === "verifie"
-        ? "Votre inscription a été validée avec succès. Vous pouvez vous connecter."
-        : "Votre inscription a bien été prise en compte. Vous pourrez vous connecter après validation par un administrateur."
+      status: student.student.get("verification_status") === "verifie" ? "active" : "pending",
+      message:
+        student.student.get("verification_status") === "verifie"
+          ? "Votre inscription a été validée avec succès. Vous pouvez vous connecter."
+          : "Votre inscription a bien été prise en compte. Vous pourrez vous connecter après validation par un administrateur."
     });
+
 
 
   } catch (err) {
