@@ -1,11 +1,18 @@
 // src/services/alumni.service.js
 const bcrypt = require("bcrypt");
-const { validatePassword, validateAnneeDiplome, validateDateNaissance, validateNomPrenom, validateJustificatifUrl } = require("../utils/validators");
+const {
+  validatePassword,
+  validateAnneeDiplome,
+  validateDateNaissance,
+  validateNomPrenom,
+  validateJustificatifUrl
+} = require("../utils/validators");
 
 const User = require("../models/User");
 const Student = require("../models/Student");
 const Alumni = require("../models/Alumni");
 const Address = require("../models/Address");
+const { normalizeAddress } = require("../utils/addressNormalizer");
 
 const mailService = require("./mail.service");
 
@@ -33,108 +40,147 @@ class AlumniService {
       specialite
     } = data;
 
-    /** =============================== **/
-    /**       VALIDATIONS SIMPLES      **/
-    /** =============================== **/
-    if (!data.num_etudiant) throw { status:400, message:"Numéro étudiant requis" };
-    /*const existingNum = await Student.findOne({ where:{ num_student:data.num_student }});
-    if (!existingNum) throw { status:404, message:"Numéro étudiant introuvable. Vérifiez votre diplôme." };*/
+    /** ===============================
+     * 1️⃣ VALIDATIONS DE BASE
+     =============================== */
 
-    const  anneeDiplomeValidation= validateAnneeDiplome(annee_diplome);
-    if (!anneeDiplomeValidation.valid) throw { status:400, message: anneeDiplomeValidation.message };
-    
-    const birthCheck = validateDateNaissance(dateNaissance);
-    if (!birthCheck.valid) throw { status:400, message: birthCheck.message };
-
-    const passwordValidation = validatePassword(pass, dateNaissance);
-    if (!passwordValidation.valid) {
-    throw { status: 400, message: passwordValidation.message };
+    if (!num_etudiant) {
+      throw { status: 400, message: "Numéro étudiant requis" };
     }
 
-    // Vérifier unicité login/email/téléphone
-    const existsUser = await User.findOne({
-      where: { login: username.toLowerCase() }
+    const student = await Student.findOne({
+      where: { num_etudiant },
+      include: [{ model: User, as: "user" }]
     });
-    if (existsUser) throw { status: 409, message: "Login déjà utilisé" };
 
-    const existsEmail = await User.findOne({ where: { email } });
-    if (existsEmail) throw { status: 409, message: "Email déjà utilisé" };
+    if (!student) {
+      throw {
+        status: 404,
+        message: "Numéro étudiant introuvable. Vérifiez votre diplôme."
+      };
+    }
 
-    const existsTel = await User.findOne({ where: { numero } });
-    if (existsTel) throw { status: 409, message: "Numéro déjà utilisé" };
+    const user = student.user;
 
-    // Validation Nom et Prénom
-    const prenomValidation = validateNomPrenom("Prénom", prenom);
-    if (!prenomValidation.valid) throw { status:400, message: prenomValidation.message };
+    /** ===============================
+     * 2️⃣ VALIDATIONS MÉTIER
+     =============================== */
 
-    const nomValidation = validateNomPrenom("Nom", nom);
-    if (!nomValidation.valid) throw { status:400, message: nomValidation.message };
+    const anneeCheck = validateAnneeDiplome(annee_diplome);
+    if (!anneeCheck.valid) {
+      throw { status: 400, message: anneeCheck.message };
+    }
+
+    const birthCheck = validateDateNaissance(dateNaissance);
+    if (!birthCheck.valid) {
+      throw { status: 400, message: birthCheck.message };
+    }
+
+    const passwordCheck = validatePassword(pass, dateNaissance);
+    if (!passwordCheck.valid) {
+      throw { status: 400, message: passwordCheck.message };
+    }
+
+    const prenomCheck = validateNomPrenom("Prénom", prenom);
+    if (!prenomCheck.valid) {
+      throw { status: 400, message: prenomCheck.message };
+    }
+
+    const nomCheck = validateNomPrenom("Nom", nom);
+    if (!nomCheck.valid) {
+      throw { status: 400, message: nomCheck.message };
+    }
 
     const justificatifCheck = validateJustificatifUrl(justificatif);
-    if (!justificatifCheck.valid) throw { status: 400, message: justificatifCheck.message };
+    if (!justificatifCheck.valid) {
+      throw { status: 400, message: justificatifCheck.message };
+    }
 
+    /** ===============================
+     * 3️⃣ UNICITÉ (hors utilisateur courant)
+     =============================== */
 
-    /** ===================================== **/
-    /**       HASH MOT DE PASSE + USER        **/
-    /** ===================================== **/
-    const passwordHash = await bcrypt.hash(pass, 10);
+    const existsLogin = await User.findOne({
+      where: { login: username.toLowerCase() }
+    });
+    if (existsLogin && existsLogin.id !== user.id) {
+      throw { status: 409, message: "Login déjà utilisé" };
+    }
 
-    // Enregistrer ou récupérer l'adresse normalisée
+    const existsEmail = await User.findOne({ where: { email } });
+    if (existsEmail && existsEmail.id !== user.id) {
+      throw { status: 409, message: "Email déjà utilisé" };
+    }
+
+    const existsTel = await User.findOne({ where: { numero } });
+    if (existsTel && existsTel.id !== user.id) {
+      throw { status: 409, message: "Numéro déjà utilisé" };
+    }
+
+    /** ===============================
+     * 4️⃣ ADRESSE
+     =============================== */
+
     let addressSaved = null;
 
     if (address) {
-    const [addr] = await Address.findOrCreate({
+      const [addr] = await Address.findOrCreate({
         where: { normalized: normalizeAddress(address) },
-        defaults: { ...address } 
-    });
-
-    addressSaved = addr;
+        defaults: { ...address }
+      });
+      addressSaved = addr;
     }
 
-    // Création user 
-    const user = await User.create({
-    login: username.toLowerCase(),
-    passwordHash,
-    prenom,
-    nom,
-    email,
-    numero,
-    nationalite,
-    gender: genre,
-    langue,
-    role: "alumni",
-    addressId: addressSaved?.id || null,
-    account_status: "pending"
+    /** ===============================
+     * 5️⃣ UPDATE USER
+     =============================== */
+
+    const passwordHash = await bcrypt.hash(pass, 10);
+
+    await user.update({
+      login: username.toLowerCase(),
+      passwordHash,
+      prenom,
+      nom,
+      email,
+      numero,
+      nationalite,
+      gender: genre,
+      langue,
+      role: "alumni",
+      addressId: addressSaved?.id || null,
+      account_status: "pending"
     });
 
+    /** ===============================
+     * 6️⃣ UPDATE STUDENT
+     =============================== */
 
-    /** =============================== **/
-    /**         CREATE STUDENT          **/
-    /** =============================== **/
-    const student = await Student.create({
-    id: user.id,
-    num_student: data.num_etudiant,
-    specialite,
-    centres_interet,
-    justificatif_url: justificatif || null,
-    verification_status: "en_cours",
-    verified_at: null,
+    await student.update({
+      specialite,
+      centres_interet,
+      justificatif_url: justificatif || student.justificatif_url,
+      verification_status: "en_cours",
+      verified_at: null
     });
 
-
-    /** =============================== **/
-    /**          CREATE ALUMNI          **/
-    /** =============================== **/
+    /** ===============================
+     * 7️⃣ CREATE ALUMNI
+     =============================== */
 
     const alumni = await Alumni.create({
-    id: student.id,
-    annee_diplome,
-    position,
-    entreprise,
-    profile_verified: false
+      id: student.id,
+      annee_diplome,
+      position,
+      entreprise,
+      profile_verified: false
     });
 
-    //await mailService.sendAlumniPendingEmail(alumni);
+    /** ===============================
+     * 8️⃣ EMAIL
+     =============================== */
+
+    await mailService.sendStudentPendingEmail(user);
 
     return { user, student, alumni };
   }

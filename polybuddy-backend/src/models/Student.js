@@ -17,7 +17,7 @@ Student.init({
       },
       onDelete: "CASCADE"
   },
-  num_student: {
+  num_etudiant: {
     type: DataTypes.INTEGER,
     allowNull: true,
     unique: true,

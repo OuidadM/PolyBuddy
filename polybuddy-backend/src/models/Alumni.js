@@ -17,12 +17,14 @@ Alumni.init(
     },
 
     annee_diplome: {
-      type: DataTypes.DATE,
+      type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
-        isDate: { msg: "L'année de diplôme doit être une date valide." }
+        min: 1980,
+        max: new Date().getFullYear()
       }
     },
+
 
     position: {
       type: DataTypes.STRING,

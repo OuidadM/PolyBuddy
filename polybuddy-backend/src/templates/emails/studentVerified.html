@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>PolyBuddy</title>
+</head>
+
+<body style="margin:0;background:#1d3039;font-family:Nunito,sans-serif;color:white">
+
+  <div style="max-width:600px;margin:auto;padding:40px">
+
+    <!-- Logo -->
+    <img 
+      src="https://res.cloudinary.com/djnaj7n78/image/upload/v1766915749/logoPolyBuddy_mupirx.png"
+      width="120"
+      style="margin-bottom:20px"
+      alt="PolyBuddy"
+    />
+
+    <!-- Image de bienvenue -->
+    <img 
+      src="https://res.cloudinary.com/djnaj7n78/image/upload/v1766915790/welcome_kryaij.png"
+      alt="Bienvenue sur PolyBuddy"
+      width="100%"
+      style="
+        max-width:520px;
+        display:block;
+        margin:20px auto 30px;
+        border-radius:16px;
+      "
+    />
+
+    <!-- Contenu -->
+    <h2 style="color:#2ba8fb">
+      Bienvenue {{firstname}} 🎓
+    </h2>
+
+    <p>
+      Nous sommes ravis de t'informer que ton compte
+      <strong>{{role}}</strong> sur <strong>PolyBuddy</strong>
+      a été <span style="color:#6fc5ff;font-weight:bold">validé avec succès</span>.
+    </p>
+
+    <p>
+      Tu peux désormais accéder à toutes les fonctionnalités de la plateforme :
+      échanges entre étudiants, entraide, événements et bien plus encore.
+    </p>
+
+    <!-- Bouton -->
+    <a href="{{frontUrl}}"
+       style="
+         display:inline-block;
+         margin-top:30px;
+         padding:12px 30px;
+         background:#2ba8fb;
+         color:white;
+         border-radius:100px;
+         text-decoration:none;
+         font-weight:bold">
+      Accéder à PolyBuddy
+    </a>
+
+    <!-- Footer -->
+    <p style="margin-top:40px;font-size:12px;opacity:0.7">
+      © PolyBuddy - Ton réseau d'étudiants à Polytech Angers
+    </p>
+
+  </div>
+
+</body>
+</html>
