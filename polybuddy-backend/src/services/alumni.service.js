@@ -149,7 +149,7 @@ class AlumniService {
       langue,
       role: "alumni",
       addressId: addressSaved?.id || null,
-      account_status: "pending"
+      account_status: "active"
     });
 
     /** ===============================

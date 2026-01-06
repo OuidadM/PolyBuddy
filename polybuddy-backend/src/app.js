@@ -10,6 +10,7 @@ app.use(cors({
 }));
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true })); // Pour parser les form-data
 
 app.get("/", (req, res) => {
   res.send("App OK, DB sera testée au démarrage du serveur");
