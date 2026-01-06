@@ -122,7 +122,15 @@ User.init(
     modelName: "User",
     tableName: "users", 
     timestamps: true,
-    defaultScope: { attributes: { exclude: ["passwordHash"] } },
+    defaultScope: {
+      attributes: { exclude: ["passwordHash"] }
+    },
+
+    scopes: {
+      withPassword: {
+        attributes: {}
+      }
+    }
   });
 
 

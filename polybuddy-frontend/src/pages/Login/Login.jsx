@@ -9,10 +9,11 @@ import Rose from "../Home/assets/Rose.png";
 
 import Logo from "../Home/assets/Logo.png";
 import { useNavigate } from "react-router-dom";
-import authService from "../../services/auth.service";
+import { useAuth } from "../../auth/AuthContext"; // ✅ Import du Context
 
 export default function Login() {
   const navigate = useNavigate();
+  const { login } = useAuth(); // ✅ Récupérer la fonction login du Context
   
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -43,15 +44,9 @@ export default function Login() {
     try {
       setIsLoading(true);
       
-      // Appel au service
-      const response = await authService.login(loginData);
-      
-      // Connexion réussie
-      console.log("Connexion réussie:", response);
-      
-      // Le JWT est automatiquement stocké dans un cookie HttpOnly
-      // Redirection vers la page d'accueil ou dashboard
-      // navigate('/dashboard');
+      // ✅ Appel à la fonction login du Context
+      // Le Context gère automatiquement la redirection selon le rôle
+      await login(loginData);
       
     } catch (error) {
       // Afficher le message d'erreur

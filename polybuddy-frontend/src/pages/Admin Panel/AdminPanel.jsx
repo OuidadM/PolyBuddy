@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './AdminPanel.css';
 import NavbarLogo from '../components/Navbar/Navbar';
-import adminPanelData from '../../pages/data/adminPanelData.jsx';
+import adminPanelData from '../data/adminPanelData.jsx';
 
 const AdminPanel = () => {
   const [students, setStudents] = useState(adminPanelData);

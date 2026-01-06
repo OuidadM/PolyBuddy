@@ -228,7 +228,7 @@ class StudentService {
         specialite,
         centres_interet,
         justificatif_url: justificatif || null,
-        verification_status: "non_verifie",
+        verification_status: "en_cours",
         verified_at: new Date()
       });
     }
