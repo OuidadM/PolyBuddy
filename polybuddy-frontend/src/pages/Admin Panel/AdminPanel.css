@@ -157,3 +157,167 @@ body, html, .admin-page {
   margin-top: 20px;
   border: 2px dashed #ccc;
 }
+
+/* Ajoutez ces styles à votre AdminPanel.css existant */
+
+/* ================================
+   AMÉLIORATION DU MODAL UNIQUEMENT
+================================ */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: fadeInOverlay 0.3s ease;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 900px;
+  max-height: 85vh;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: slideInModal 0.3s ease;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 25px;
+  border-bottom: 1px solid #e0e0e0;
+  background: #f8f9fa;
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 18px;
+  color: #2c3e50;
+  font-weight: 400; /* ✅ Font weight réduit */
+}
+
+.modal-body {
+  padding: 20px; /* ✅ Marge entre titre et contenu */
+  background: #ffffff;
+  overflow: auto;
+  max-height: calc(85vh - 80px);
+}
+
+/* Boutons de zoom */
+.zoom-btn {
+  transition: all 0.2s ease;
+}
+
+.zoom-btn:hover {
+  background: #e0e0e0 !important;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.zoom-btn:active {
+  transform: translateY(0);
+}
+
+/* Bouton fermer amélioré */
+.close-btn {
+  font-size: 28px;
+  font-weight: 300;
+  color: #666;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0 10px;
+  line-height: 1;
+  transition: all 0.2s ease;
+}
+
+.close-btn:hover {
+  color: #d32f2f;
+  transform: rotate(90deg);
+}
+
+/* Scrollbar personnalisée pour modal-body */
+.modal-body::-webkit-scrollbar {
+  width: 8px;
+}
+
+.modal-body::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.modal-body::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.modal-body::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Animations */
+@keyframes fadeInOverlay {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInModal {
+  from {
+    opacity: 0;
+    transform: translateY(-30px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Placeholder amélioré */
+.placeholder-doc {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 400px;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  border-radius: 8px;
+  color: #666;
+  font-size: 18px;
+  font-weight: 500;
+  border: 2px dashed #ccc;
+}
+
+/* Responsive pour les petits écrans */
+@media (max-width: 768px) {
+  .modal-content {
+    width: 95%;
+    max-height: 90vh;
+  }
+
+  .modal-header {
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-start;
+  }
+
+  .modal-header h3 {
+    font-size: 16px;
+  }
+
+  .zoom-btn {
+    padding: 4px 8px !important;
+    font-size: 14px !important;
+  }
+}

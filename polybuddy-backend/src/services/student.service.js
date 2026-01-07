@@ -7,12 +7,131 @@ const {
 
 const User = require("../models/User");
 const Student = require("../models/Student");
+const Alumni = require("../models/Alumni");
 const Address = require("../models/Address");
 const { normalizeAddress } = require("../utils/addressNormalizer");
 
 const mailService = require("./mail.service");
 
 class StudentService {
+
+  /**
+   * Récupérer la liste des étudiants et alumni par statut de vérification
+   * @param {string} verificationStatus - 'non_verifie', 'en_cours', 'verifie', 'rejete'
+   * @returns {Array} Liste des students avec leurs infos user et alumni (si applicable)
+   */
+  static async getListStudents(verificationStatus) {
+    try {
+      // Validation du statut
+      const validStatuses = ['non_verifie', 'en_cours', 'verifie', 'rejete'];
+      if (!validStatuses.includes(verificationStatus)) {
+        throw {
+          status: 400,
+          message: `Statut invalide. Valeurs autorisées : ${validStatuses.join(', ')}`
+        };
+      }
+
+      // Récupérer tous les students avec le statut demandé
+      const students = await Student.findAll({
+        where: {
+          verification_status: verificationStatus
+        },
+        include: [
+          {
+            model: User,
+            as: "user",
+            attributes: [
+              'id', 
+              'login', 
+              'nom', 
+              'prenom', 
+              'email', 
+              'numero', 
+              'nationalite', 
+              'gender', 
+              'langue',
+              'dateNaissance',
+              'account_status',
+              'createdAt'
+            ],
+            include: [
+              {
+                model: Address,
+                attributes: ['street', 'city', 'postalCode']
+              }
+            ]
+          },
+          {
+            model: Alumni,
+            as: "alumni",
+            required: false, // LEFT JOIN (inclure même si pas alumni)
+            attributes: [
+              'annee_diplome', 
+              'position', 
+              'entreprise', 
+              'profile_verified',
+              'createdAt'
+            ]
+          }
+        ],
+        order: [
+          ['createdAt', 'DESC'] // Les plus récents en premier
+        ]
+      });
+
+      // Formater les résultats
+      const formattedStudents = students.map(student => {
+        const isAlumni = !!student.alumni;
+        
+        return {
+          // Infos Student
+          id: student.id,
+          num_etudiant: student.num_etudiant,
+          mail_univ: student.mail_univ,
+          niveau: student.niveau,
+          specialite: student.specialite,
+          centres_interet: student.centres_interet,
+          justificatif_url: student.justificatif_url,
+          verification_status: student.verification_status,
+          verified_at: student.verified_at,
+          type: isAlumni ? "Alumni" : "Étudiant", // ✅ Type pour le frontend
+          
+          // Infos User
+          user: {
+            login: student.user.login,
+            nom: student.user.nom,
+            prenom: student.user.prenom,
+            email: student.user.email,
+            numero: student.user.numero,
+            nationalite: student.user.nationalite,
+            gender: student.user.gender,
+            langue: student.user.langue,
+            dateNaissance: student.user.dateNaissance,
+            account_status: student.user.account_status,
+            address: student.user.Address || null
+          },
+          
+          // Infos Alumni (si applicable)
+          alumni: isAlumni ? {
+            annee_diplome: student.alumni.annee_diplome,
+            position: student.alumni.position,
+            entreprise: student.alumni.entreprise,
+            profile_verified: student.alumni.profile_verified
+          } : null,
+          
+          // Dates
+          createdAt: student.createdAt,
+          updatedAt: student.updatedAt
+        };
+      });
+
+      return formattedStudents;
+
+    } catch (error) {
+      console.error("❌ Erreur getListStudents:", error);
+      throw error;
+    }
+  }
 
   static async register(data) {
     const {
@@ -87,9 +206,6 @@ class StudentService {
       };
     }
 
-    console.log("studentByNum : ",studentByNum)
-    console.log("studentByNum : ",studentByNum)
-
     // ❌ Mail existe mais pas de numéro correspondant
     if (!studentByNum && studentByMail) {
       throw {
@@ -101,6 +217,7 @@ class StudentService {
 
     // ✅ Étudiant existant (même personne)
     const existingStudent = studentByNum || studentByMail;
+
     /** ===============================
      * 3️⃣ VALIDATIONS GLOBALES
      =============================== */
@@ -124,11 +241,6 @@ class StudentService {
       };
     }
 
-    const passwordValidation = validatePassword(pass, dateNaissance);
-    if (!passwordValidation.valid) {
-    throw { status: 400, message: passwordValidation.message };
-    }
-
     // Vérifier unicité login/email/téléphone
     const existsUser = await User.findOne({
       where: { login: username.toLowerCase() }
@@ -140,7 +252,6 @@ class StudentService {
 
     const existsTel = await User.findOne({ where: { numero } });
     if (existsTel) throw { status: 409, message: "Numéro déjà utilisé" };
-
 
     /** ===============================
      * 4️⃣ GESTION ADRESSE (CENTRALISÉE)
@@ -170,10 +281,8 @@ class StudentService {
     let user;
     let student;
 
-    console.log("existingStudent : ",existingStudent)
     if (existingStudent) {
       /** ========= UPDATE ========= */
-      console.log("I am in existingStudent ")
       user = await User.findByPk(existingStudent.id);
 
       await user.update({
