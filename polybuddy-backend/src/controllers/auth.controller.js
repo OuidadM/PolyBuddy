@@ -183,4 +183,54 @@ exports.registerAdmin = async (req, res) => {
   }
 };
 
+/**
+ * Vérifier si l'utilisateur est connecté (via le JWT)
+ * GET /api/auth/me
+ */
+exports.me = async (req, res) => {
+  try {
+    // req.user est injecté par le middleware authenticate
+    return res.status(200).json({
+      success: true,
+      user: {
+        id: req.user.id,
+        login: req.user.login,
+        nom: req.user.nom,
+        prenom: req.user.prenom,
+        email: req.user.email,
+        role: req.user.role,
+        account_status: req.user.account_status
+      }
+    });
+  } catch (error) {
+    console.error("❌ Erreur /me:", error);
+    return res.status(500).json({
+      success: false,
+      error: "Erreur lors de la récupération du profil"
+    });
+  }
+};
+
+exports.logout = async (req, res) => {
+  try {
+    // Supprimer le cookie
+    res.clearCookie("token", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax"
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "Déconnexion réussie"
+    });
+  } catch (error) {
+    console.error("❌ Erreur logout:", error);
+    return res.status(500).json({
+      success: false,
+      error: "Erreur lors de la déconnexion"
+    });
+  }
+};
+
 

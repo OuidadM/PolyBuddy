@@ -1,22 +1,48 @@
+// app.js
 require('dotenv').config();
+
 const express = require('express');
 const cors = require('cors');
-const authRoutes = require("./routes/auth.routes");
+const cookieParser = require('cookie-parser');
+
+const authRoutes = require('./routes/auth.routes');
+const adminRoutes = require('./routes/admin.routes');
+
 const app = express();
 
+/**
+ * ================================
+ * 🌐 MIDDLEWARES GLOBAUX
+ * ================================
+ */
 app.use(cors({
-  origin: "http://localhost:5173", // frontend exact
-  credentials: true                // cookies / auth
+  origin: 'http://localhost:5173',
+  credentials: true
 }));
 
+app.use(cookieParser());               // ✅ OBLIGATOIRE pour JWT en cookie
 app.use(express.json());
-app.use(express.urlencoded({ extended: true })); // Pour parser les form-data
+app.use(express.urlencoded({ extended: true }));
 
-app.get("/", (req, res) => {
-  res.send("App OK, DB sera testée au démarrage du serveur");
+/**
+ * ================================
+ * 🛣️ ROUTES
+ * ================================
+ */
+app.get('/', (req, res) => {
+  res.send('✅ API PolyBuddy opérationnelle');
 });
 
-app.use("/api/auth", authRoutes);
+app.use('/api/auth', authRoutes);       // login, register, logout
+app.use('/api/admin', adminRoutes);     // routes protégées admin
+
+/**
+ * ================================
+ * ❌ ROUTE 404
+ * ================================
+ */
+app.use((req, res) => {
+  res.status(404).json({ message: 'Route introuvable' });
+});
 
 module.exports = app;
-
