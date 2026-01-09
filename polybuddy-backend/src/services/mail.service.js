@@ -48,6 +48,40 @@ async function sendStudentPendingEmail(user) {
   });
 }
 
+async function sendApprovalEmail(user) {
+  const html = loadTemplate("studentVerified", {
+    firstname: user.prenom,
+    role: user.role,
+    frontUrl: process.env.FRONT_URL
+  });
+
+  await sendMail({
+    to: user.email,
+    subject: "🎉 Inscription PolyBuddy validée",
+    html
+  });
+}
+
+async function sendRejectionEmail(user, reason = null) {
+  const html = loadTemplate("studentRejected", {
+    firstname: user.prenom,
+    role: user.role,
+    frontUrl: process.env.FRONT_URL,
+    reason
+  });
+
+  await sendMail({
+    to: user.email,
+    subject: "Décision concernant votre inscription PolyBuddy",
+    html
+  });
+}
+
+
+
 module.exports = {
-  sendStudentPendingEmail
+  sendStudentPendingEmail,
+  sendApprovalEmail,
+  sendRejectionEmail
 };
+

@@ -97,7 +97,10 @@ User.init(
           }
         }
       },
-    
+    avatar_url: {
+      type: DataTypes.STRING,
+      allowNull: true
+    }, 
     addressId: {
       type: DataTypes.INTEGER,
       references: { model: "addresses", key: "id" }
