@@ -2,6 +2,8 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import './App.css';
 
+import { useAuth } from './auth/AuthContext';
+
 /* =======================
    AUTH
 ======================= */
@@ -9,8 +11,6 @@ import { AuthProvider } from './auth/AuthContext';
 import {
   ProtectedRoute,
   AdminRoute,
-  StudentRoute,
-  AlumniRoute,
   PublicRoute
 } from './auth/ProtectedRoute';
 
@@ -36,10 +36,15 @@ import Chat from './pages/Chat';
 import MainLayout from './pages/components/Layout';
 
 /* =======================
+   PROFILS
+======================= */
+import StudentProfile from './pages/Profile/Student.jsx';
+import AlumniProfile from './pages/Profile/Alumni.jsx';
+
+/* =======================
    ADMIN
 ======================= */
 import AdminPanel from './pages/Admin Panel/AdminPanel.jsx';
-//import AdminDashboard from './pages/Admin/Dashboard';
 
 function App() {
   return (
@@ -61,14 +66,8 @@ function App() {
             }
           />
 
-          <Route
-            path="/register"
-            element={
-              <PublicRoute>
-                <RegisterPhase1 />
-              </PublicRoute>
-            }
-          />
+          {/* Routes d'inscription */}
+          <Route path="/register" element={<RegisterPhase1 />} />
           <Route path="/register/1" element={<RegisterPhase1 />} />
           <Route path="/register/2" element={<RegisterPhase2 />} />
           <Route path="/register/3" element={<RegisterPhase3 />} />
@@ -77,7 +76,7 @@ function App() {
           <Route path="/register/success" element={<RegisterSuccess />} />
 
           {/* =========================
-              ROUTES PROTÉGÉES (layout)
+              ROUTES PROTÉGÉES (avec MainLayout)
           ========================== */}
           <Route
             element={
@@ -86,8 +85,10 @@ function App() {
               </ProtectedRoute>
             }
           >
+            {/* Fil d'actualité */}
             <Route path="/home" element={<Feed />} />
 
+            {/* Chat - Accessible aux étudiants et alumni */}
             <Route
               path="/chat"
               element={
@@ -95,6 +96,32 @@ function App() {
                   <Chat />
                 </ProtectedRoute>
               }
+            />
+
+            {/* Profile étudiant - Accessible uniquement aux étudiants */}
+            <Route
+              path="/profile/student"
+              element={
+                <ProtectedRoute allowedRoles={['student']}>
+                  <StudentProfile />
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Profile alumni - Accessible uniquement aux alumni */}
+            <Route
+              path="/profile/alumni"
+              element={
+                <ProtectedRoute allowedRoles={['alumni']}>
+                  <AlumniProfile />
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Route /profile qui redirige automatiquement selon le rôle */}
+            <Route
+              path="/profile"
+              element={<ProfileRedirect />}
             />
           </Route>
 
@@ -109,24 +136,45 @@ function App() {
               </AdminRoute>
             }
           />
-          {/*<Route
-            path="/admin/dashboard"
-            element={
-              <AdminRoute>
-                <AdminDashboard />
-              </AdminRoute>
-            }
-          />*/}
 
           {/* =========================
               404
           ========================== */}
-          <Route path="*" element={<Navigate to="/" />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
 
         </Routes>
       </AuthProvider>
     </BrowserRouter>
   );
+}
+
+/**
+ * Composant qui redirige vers le bon profil selon le rôle
+ */
+function ProfileRedirect() {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return <div>Chargement...</div>;
+  }
+
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+
+  if (user.role === 'student') {
+    return <Navigate to="/profile/student" replace />;
+  }
+
+  if (user.role === 'alumni') {
+    return <Navigate to="/profile/alumni" replace />;
+  }
+
+  if (user.role === 'admin') {
+    return <Navigate to="/admin/home" replace />;
+  }
+
+  return <Navigate to="/home" replace />;
 }
 
 export default App;

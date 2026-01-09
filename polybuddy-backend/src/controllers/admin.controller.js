@@ -1,8 +1,6 @@
-// src/controllers/adminController.js
+// src/controllers/admin.controller.js
 
-const StudentService = require("../services/student.service");
-const User = require("../models/User");
-const Student = require("../models/Student");
+const AdminService = require("../services/admin.service");
 
 /**
  * ========================================
@@ -17,12 +15,10 @@ const Student = require("../models/Student");
 exports.getStudents = async (req, res) => {
   try {
     const { status } = req.query;
-
-    // Valeur par défaut si pas de statut fourni
     const verificationStatus = status || 'en_cours';
 
     // Appel au service
-    const students = await StudentService.getListStudents(verificationStatus);
+    const students = await AdminService.getStudentsList(verificationStatus);
 
     return res.status(200).json({
       success: true,
@@ -32,7 +28,7 @@ exports.getStudents = async (req, res) => {
     });
 
   } catch (error) {
-    console.error("❌ Erreur getStudentsList:", error);
+    console.error("❌ Erreur getStudents:", error);
     
     return res.status(error.status || 500).json({
       success: false,
@@ -47,28 +43,16 @@ exports.getStudents = async (req, res) => {
  */
 exports.getAdminStats = async (req, res) => {
   try {
-    const statuses = ['non_verifie', 'en_cours', 'verifie', 'rejete'];
-    const stats = {};
-
-    // Compter pour chaque statut
-    for (const status of statuses) {
-      const list = await StudentService.getListStudents(status);
-      stats[status] = list.length;
-    }
+    // Appel au service
+    const stats = await AdminService.getStats();
 
     return res.status(200).json({
       success: true,
-      stats: {
-        non_verifie: stats.non_verifie,
-        en_cours: stats.en_cours,
-        verifie: stats.verifie,
-        rejete: stats.rejete,
-        total: Object.values(stats).reduce((sum, val) => sum + val, 0)
-      }
+      stats
     });
 
   } catch (error) {
-    console.error("❌ Erreur getStudentsStats:", error);
+    console.error("❌ Erreur getAdminStats:", error);
     
     return res.status(error.status || 500).json({
       success: false,
@@ -85,33 +69,10 @@ exports.approveStudent = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const student = await Student.findByPk(id);
-    if (!student) {
-      return res.status(404).json({
-        success: false,
-        error: "Étudiant non trouvé"
-      });
-    }
+    // Appel au service
+    const result = await AdminService.approveStudent(id);
 
-    // Mettre à jour le statut
-    await student.update({
-      verification_status: 'verifie',
-      verified_at: new Date()
-    });
-
-    // Mettre à jour le compte utilisateur
-    await User.update(
-      { account_status: 'active' },
-      { where: { id } }
-    );
-
-    // TODO: Envoyer un email de confirmation
-    // await mailService.sendApprovalEmail(student);
-
-    return res.status(200).json({
-      success: true,
-      message: "Demande approuvée avec succès"
-    });
+    return res.status(200).json(result);
 
   } catch (error) {
     console.error("❌ Erreur approveStudent:", error);
@@ -130,35 +91,12 @@ exports.approveStudent = async (req, res) => {
 exports.rejectStudent = async (req, res) => {
   try {
     const { id } = req.params;
-    const { reason } = req.body; // Raison du rejet (optionnel)
+    const { reason } = req.body;
 
-    const student = await Student.findByPk(id);
-    if (!student) {
-      return res.status(404).json({
-        success: false,
-        error: "Étudiant non trouvé"
-      });
-    }
+    // Appel au service
+    const result = await AdminService.rejectStudent(id, reason);
 
-    // Mettre à jour le statut
-    await student.update({
-      verification_status: 'rejete',
-      verified_at: new Date()
-    });
-
-    // Mettre à jour le compte utilisateur
-    await User.update(
-      { account_status: 'suspended' },
-      { where: { id } }
-    );
-
-    // TODO: Envoyer un email de rejet
-    // await mailService.sendRejectionEmail(student, reason);
-
-    return res.status(200).json({
-      success: true,
-      message: "Demande rejetée"
-    });
+    return res.status(200).json(result);
 
   } catch (error) {
     console.error("❌ Erreur rejectStudent:", error);
@@ -182,10 +120,8 @@ exports.rejectStudent = async (req, res) => {
  */
 exports.getAllUsers = async (req, res) => {
   try {
-    const users = await User.findAll({
-      attributes: { exclude: ['passwordHash'] },
-      order: [['createdAt', 'DESC']]
-    });
+    // Appel au service
+    const users = await AdminService.getAllUsers();
 
     return res.status(200).json({
       success: true,
@@ -211,20 +147,10 @@ exports.suspendUser = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const user = await User.findByPk(id);
-    if (!user) {
-      return res.status(404).json({
-        success: false,
-        error: "Utilisateur non trouvé"
-      });
-    }
+    // Appel au service
+    const result = await AdminService.suspendUser(id);
 
-    await user.update({ account_status: 'suspended' });
-
-    return res.status(200).json({
-      success: true,
-      message: "Utilisateur suspendu"
-    });
+    return res.status(200).json(result);
 
   } catch (error) {
     console.error("❌ Erreur suspendUser:", error);

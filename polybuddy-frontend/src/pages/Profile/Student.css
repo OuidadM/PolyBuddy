@@ -1,0 +1,438 @@
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #f1f5f9; 
+}
+
+
+.profile-wrapper {
+  min-height: 100vh;
+  padding: 30px;
+  background: #f1f5f9;
+  position: relative;
+}
+
+
+.profile-wrapper {
+  overflow-y: auto;
+  overflow-x: hidden;
+  -ms-overflow-style: none; 
+  scrollbar-width: none; 
+}
+
+.profile-wrapper::-webkit-scrollbar {
+  display: none; 
+}
+
+
+.profile-wrapper:focus,
+.profile-wrapper:active {
+  outline: none !important;
+  border: none !important;
+}
+
+
+
+.profile-photo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.photo-wrapper {
+  padding: 6px;
+  border-radius: 50%;
+}
+
+.profile-photo:hover .photo-wrapper {
+  box-shadow: 0 0 0 4px #019EE6;
+}
+
+.photo-circle {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid #e5e7eb;
+}
+
+.photo-circle img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.photo-edit {
+  margin-top: 12px;
+  color: #019EE6;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+
+.profile-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+}
+
+.profile-tabs button {
+  padding: 10px 22px;
+  border-radius: 22px;
+  border: none;
+  background: #e5e7eb;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: inherit;
+  font-size: 15px;
+}
+
+.profile-tabs button:hover {
+  background: #d1d5db;
+}
+
+.profile-tabs .active {
+  background: #019EE6;
+  color: white;
+}
+
+.profile-tabs .active:hover {
+  background: #0288d1;
+}
+
+
+.profile-tabs button:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+
+.profile-content {
+  max-width: 1100px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.card {
+  background: white;
+  border-radius: 26px;
+  box-shadow: 0 20px 45px rgba(0,0,0,0.08);
+  border: none;
+  position: relative;
+}
+
+
+.card:focus,
+.card:active,
+.card:hover {
+  outline: none !important;
+  border: none !important;
+  box-shadow: 0 20px 45px rgba(0,0,0,0.08) !important;
+}
+
+.card-content {
+  padding: 40px 40px 60px;
+}
+
+
+.section h3 {
+  margin: 0 0 14px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #111827;
+}
+
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  margin-bottom: 32px;
+}
+
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  column-gap: 32px;
+  row-gap: 20px;
+  padding: 0 20px;
+}
+
+
+input {
+  width: 100%;
+  min-width: 0;
+  padding: 16px 20px;
+  border-radius: 16px;
+  border: 2px solid #d1d5db;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  background: white;
+  color: #111827;
+  font-family: inherit;
+}
+
+
+input:focus {
+  border-color: #019EE6;
+  box-shadow: 0 0 0 3px rgba(1, 158, 230, 0.1);
+  outline: none;
+}
+
+
+
+.locked-field {
+  background: #f3f4f6;
+  color: #6b7280;
+  cursor: not-allowed;
+  border-color: #9ca3af;
+}
+
+.locked-field:focus {
+  border-color: #9ca3af;
+  box-shadow: none;
+}
+
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding: 0 20px;
+}
+
+
+.interests-container {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.interests-category {
+  font-size: 16px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.interests-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+  margin-bottom: 5px;
+  padding: 0 10px;
+}
+
+.interest-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: #f8fafc;
+  border-radius: 16px;
+  cursor: pointer;
+  border: 2px solid #d1d5db;
+  transition: all 0.3s ease;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.interest-item:hover {
+  background: #f1f5f9;
+  border-color: #019EE6;
+  transform: translateY(-2px);
+}
+
+.interest-item input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  cursor: pointer;
+  accent-color: #019EE6;
+}
+
+.interest-item input[type="checkbox"]:focus {
+  outline: 2px solid #019EE6;
+  outline-offset: 2px;
+}
+
+
+.save-btn {
+  display: block;
+  margin: 30px auto 0;
+  padding: 16px 40px;
+  border-radius: 18px;
+  border: none;
+  background: #019EE6;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 16px;
+  min-width: 200px;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.save-btn:hover {
+  background: #0288d1;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(1, 158, 230, 0.3);
+}
+
+.save-btn:focus {
+  outline: 2px solid #019EE6;
+  outline-offset: 2px;
+}
+
+
+*:focus {
+  outline: none !important;
+}
+
+input:focus,
+button:focus,
+textarea:focus,
+select:focus {
+  outline: none !important;
+}
+
+
+::selection {
+  background: rgba(1, 158, 230, 0.2);
+  color: inherit;
+}
+
+::-moz-selection {
+  background: rgba(1, 158, 230, 0.2);
+  color: inherit;
+}
+
+
+@media (max-width: 768px) {
+  .profile-wrapper {
+    padding: 20px 15px;
+    min-height: 100vh;
+  }
+  
+  .profile-tabs {
+    gap: 10px;
+    padding: 0 10px;
+  }
+  
+  .profile-tabs button {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+  
+  .card-content {
+    padding: 25px;
+  }
+  
+  .row {
+    column-gap: 20px;
+    row-gap: 15px;
+    grid-template-columns: 1fr;
+  }
+  
+  .photo-circle {
+    width: 150px;
+    height: 150px;
+  }
+  
+  .save-btn {
+    width: 100%;
+    min-width: auto;
+  }
+  
+  .column,
+  .row,
+  .interests-grid {
+    padding: 0 10px;
+  }
+  
+  .interests-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
+  }
+  
+  .interest-item {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-wrapper {
+    padding: 15px 10px;
+    min-height: 100vh;
+  }
+  
+  .card-content {
+    padding: 20px;
+  }
+  
+  .photo-circle {
+    width: 120px;
+    height: 120px;
+  }
+  
+  .profile-tabs {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .profile-tabs button {
+    width: 100%;
+    max-width: 250px;
+  }
+  
+  .save-btn {
+    padding: 14px 20px;
+  }
+  
+  .interests-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .interests-category {
+    font-size: 15px;
+  }
+  
+ 
+  html, body {
+    background: #f1f5f9;
+  }
+  
+  body {
+    overflow: hidden;
+  }
+}
+
+
+html {
+  background: #f1f5f9;
+}
+
+body {
+  background: #f1f5f9;
+  overflow-x: hidden;
+}
+
+
+input, textarea, select {
+  font-size: 16px; 
+}

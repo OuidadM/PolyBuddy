@@ -1,7 +1,7 @@
 import React from "react";
 import { Avatar, Box, IconButton, Paper, Stack, CircularProgress } from "@mui/material";
 // Import hooks for navigation
-import { useNavigate, useLocation } from "react-router-dom"; 
+import { useNavigate, useLocation } from "react-router-dom";
 
 import HomeIcon from "@mui/icons-material/Home";
 import ChatIcon from "@mui/icons-material/Chat";
@@ -17,13 +17,12 @@ const AvatarPlaceholder = ({ size = 78 }) => (
 );
 
 const Sidebar = ({ isLoading, getAvatarUrl }) => {
-  // 1. Initialize Hooks
   const navigate = useNavigate();
   const location = useLocation();
 
   // 2. Helper function to check if a path is active
   const isActive = (path) => location.pathname === path;
-
+  
   return (
     <Paper elevation={0} className="sidebar-root">
       {/* User's own Avatar */}
@@ -63,10 +62,14 @@ const Sidebar = ({ isLoading, getAvatarUrl }) => {
           <NotificationsIcon sx={{ fontSize: 40 }} />
         </IconButton>
 
-        {/* --- SETTINGS (No route yet) --- */}
-        <IconButton className="sidebar-icon">
+        {/* --- SETTINGS --- */}
+        <IconButton
+          className="sidebar-icon"
+          onClick={() => navigate('/profile')}
+        >
           <SettingsIcon sx={{ fontSize: 40 }} />
         </IconButton>
+
 
       </Stack>
 

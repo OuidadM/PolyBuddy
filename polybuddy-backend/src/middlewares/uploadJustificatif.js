@@ -5,11 +5,15 @@ const cloudinary = require("../config/cloudinary");
 const storage = new CloudinaryStorage({
   cloudinary,
   params: {
-    folder: "justificatifs",           
+    folder: "justificatifs",
     allowed_formats: ["pdf", "png", "jpg", "jpeg"],
-    resource_type: "auto",        
+    resource_type: "auto",
+
+    // ✅ AJOUT IMPORTANT
+    access_mode: "public",
   },
 });
+
 
 const uploadJustificatif = multer({
   storage,

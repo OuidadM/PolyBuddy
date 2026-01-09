@@ -41,8 +41,13 @@ const AdminPanel = () => {
       // ✅ filter est déjà en format backend ("en_cours", "verifie", "rejete")
       console.log("🔍 Filtre utilisé:", filter); // DEBUG
       const response = await adminService.getStudents(filter);
-      
-      console.log("📦 Réponse backend:", response.data.length, "étudiants"); // DEBUG
+
+      // ✅ DEBUG STRUCTURE BACKEND
+      console.log("📦 Backend raw data:", response.data);
+      console.log("📦 Premier étudiant:", response.data?.[0]);
+      console.log("📦 user du 1er étudiant:", response.data?.[0]?.user);
+      console.log("📦 address du user:", response.data?.[0]?.user?.address);
+
       
       // Transformer les données pour correspondre au format attendu par le composant
       const transformedData = response.data.map(student => ({
@@ -52,11 +57,10 @@ const AdminPanel = () => {
         date: new Date(student.createdAt).toLocaleDateString('fr-FR'),
         email: student.user.email,
         tel: student.user.numero,
-        ecole: "Université d'Angers",
         filiere: student.specialite,
         annee: student.alumni?.annee_diplome || student.niveau || "N/A",
         adresse: student.user.address 
-          ? `${student.user.address.rue}, ${student.user.address.code_postal} ${student.user.address.ville}`
+          ? `${student.user.address.street}, ${student.user.address.postalCode} ${student.user.address.city}`
           : "Non renseignée",
         status: STATUS_MAP[student.verification_status],
         justificatif: student.justificatif_url,
@@ -263,7 +267,6 @@ const AdminPanel = () => {
                           <div className="details-content">
                             <ul>
                               <li><strong>Téléphone :</strong> {student.tel || "Non renseigné"}</li>
-                              <li><strong>Établissement :</strong> {student.ecole}</li>
                               <li><strong>Filière :</strong> {student.filiere}</li>
                               {student.type === "Alumni" ? (
                                 <>

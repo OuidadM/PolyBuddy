@@ -118,10 +118,10 @@ export default function RegisterPhase2() {
       ...page1Data, // données Page1
       email: email.trim().toLowerCase(), // ✅ email normalisé
       numero: `${countryCode}${phoneClean}`, // E.164
-      adresse: {
-        ville: ville.trim(),
-        codePostal: codePostal.trim(),
-        rue: rue.trim(),
+      address: {
+        city: ville.trim(),
+        postalCode: codePostal.trim(),
+        street: rue.trim(),
         complement: complement.trim() || null
       }
     };

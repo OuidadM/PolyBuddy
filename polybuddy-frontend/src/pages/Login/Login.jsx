@@ -50,7 +50,7 @@ export default function Login() {
       
     } catch (error) {
       // Afficher le message d'erreur
-      setErrorMessage("Le login ou mot de passe sont incorrects");
+      setErrorMessage(error.error);
       console.error("Erreur de connexion:", error);
     } finally {
       setIsLoading(false);

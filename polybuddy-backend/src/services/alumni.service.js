@@ -124,6 +124,7 @@ class AlumniService {
     let addressSaved = null;
 
     if (address) {
+      console.log("I am in address part")
       const [addr] = await Address.findOrCreate({
         where: { normalized: normalizeAddress(address) },
         defaults: { ...address }
@@ -142,6 +143,7 @@ class AlumniService {
       passwordHash,
       prenom,
       nom,
+      dateNaissance,
       email,
       numero,
       nationalite,
