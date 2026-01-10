@@ -136,8 +136,15 @@ User.init(
     }
   });
 
+User.belongsTo(Address, {
+  foreignKey: "addressId",
+  as: "address"
+});
 
-User.belongsTo(Address, { foreignKey: "addressId" });
-Address.hasMany(User, { foreignKey: "addressId" });
+Address.hasMany(User, {
+  foreignKey: "addressId",
+  as: "users"
+});
+
 
 module.exports = User;
