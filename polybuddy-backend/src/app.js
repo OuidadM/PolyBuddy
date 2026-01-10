@@ -8,6 +8,7 @@ const cookieParser = require('cookie-parser');
 const authRoutes = require('./routes/auth.routes');
 const adminRoutes = require('./routes/admin.routes');
 const profileRoutes = require("./routes/profile.routes");
+const feedRoutes = require("./routes/feed.routes");
 
 const app = express();
 
@@ -37,6 +38,7 @@ app.get('/', (req, res) => {
 app.use('/api/auth', authRoutes);       // login, register, logout
 app.use('/api/admin', adminRoutes);     // routes protégées admin
 app.use("/api/profile", profileRoutes);
+app.use('/api/feed', feedRoutes); 
 
 
 /**
