@@ -8,23 +8,41 @@ export default function StudentProfile() {
   const [loading, setLoading] = useState(true);
 
   const [profile, setProfile] = useState({
+    // ======================
+    // USER
+    // ======================
     prenom: "",
     nom: "",
     username: "",
-    num_student: "",
-    date_naissance: "",
+    numero: "",
+    email:"",
     nationalite: "",
     langue: "",
-    adresse: "",
-    complement_adresse: "",
-    code_postal: "",
-    niveau: "",
-    specialite: "",
-    mail_univ: "",
-    numero: "",
-    centres_interet: [],
-    avatar_url: ""
+    date_naissance: "",
+    avatar_url: "",
+
+    // ======================
+    // ADDRESS
+    // ======================
+    address: {
+      street: "",
+      complement: "",
+      postalCode: "",
+      city: ""
+    },
+
+    // ======================
+    // STUDENT
+    // ======================
+    student: {
+      num_student: "",
+      niveau: "",
+      specialite: "",
+      mail_univ: "",
+      centres_interet: []
+    }
   });
+
 
   const interests = [
     // Sports
@@ -74,23 +92,41 @@ export default function StudentProfile() {
         const data = await profileService.getMyProfile();
         console.log(data);
         setProfile({
+          // ======================
+          // USER
+          // ======================
           prenom: data.prenom || "",
           nom: data.nom || "",
           username: data.login || "",
-          num_student: data.student?.num_etudiant || "",
-          date_naissance: formatDateForInput(data.dateNaissance) || "",
-          nationalite: data.student?.nationalite || "",
-          langue: data.student?.langue || "",
-          adresse: data.student?.adresse || "",
-          complement_adresse: data.student?.complement_adresse || "",
-          code_postal: data.student?.code_postal || "",
-          niveau: data.student?.niveau || "",
-          specialite: data.student?.specialite || "",
-          mail_univ: data.student?.mail_univ || "",
           numero: data.numero || "",
-          centres_interet: data.student?.centres_interet || [],
-          avatar_url: data.avatar_url || ""
+          email: data.email || "",
+          nationalite: data.nationalite || "",
+          langue: data.langue || "",
+          date_naissance: formatDateForInput(data.dateNaissance),
+          avatar_url: data.avatar_url || "",
+
+          // ======================
+          // ADDRESS
+          // ======================
+          address: {
+            street: data.address?.street || "",
+            complement: data.address?.complement || "",
+            postalCode: data.address?.postalCode || "",
+            city: data.address?.city || ""
+          },
+
+          // ======================
+          // STUDENT
+          // ======================
+          student: {
+            num_student: data.student?.num_etudiant || "",
+            niveau: data.student?.niveau || "",
+            specialite: data.student?.specialite || "",
+            mail_univ: data.student?.mail_univ || "",
+            centres_interet: data.student?.centres_interet || []
+          }
         });
+
 
         setProfileImage(data.avatar_url);
       } catch (error) {
@@ -126,7 +162,12 @@ export default function StudentProfile() {
 
   const handleSave = async () => {
     try {
-      await profileService.updateMyProfile(profile);
+      const payload = structuredClone(profile);
+
+      if (!payload.student.mail_univ) {
+        delete payload.student.mail_univ;
+      }
+      await profileService.updateMyProfile(payload);
       alert("Profil mis à jour");
     } catch (error) {
       console.error("❌ Erreur sauvegarde", error);
@@ -182,7 +223,7 @@ export default function StudentProfile() {
                 </div>
                 <div className="row">
                   <input value={profile.username} onChange={e => setProfile({ ...profile, username: e.target.value })} placeholder="Nom d'utilisateur" />
-                  <input value={profile.num_student} disabled className="locked-field" />
+                  <input value={profile.student.num_student} disabled className="locked-field" />
                 </div>
                 <div className="row">
                   <input type="date" value={profile.date_naissance} onChange={e => setProfile({ ...profile, date_naissance: e.target.value })} />
@@ -190,18 +231,84 @@ export default function StudentProfile() {
                   <input value={profile.langue} onChange={e => setProfile({ ...profile, langue: e.target.value })} placeholder="Langue parlée" />
                 </div>
               </div>
-
+              <div className="section">
               <h3>Adresse</h3>
               <div className="row">
-                <input value={profile.adresse} onChange={e => setProfile({ ...profile, adresse: e.target.value })} placeholder="Adresse" />
-                <input value={profile.complement_adresse} onChange={e => setProfile({ ...profile, complement_adresse: e.target.value })} placeholder="Complément" />
-                <input value={profile.code_postal} onChange={e => setProfile({ ...profile, code_postal: e.target.value })} placeholder="Code postal" />
+                <input
+                  value={profile.address.city}
+                  onChange={e =>
+                    setProfile({
+                      ...profile,
+                      address: {
+                        ...profile.address,
+                        city: e.target.value
+                      }
+                    })
+                  }
+                  placeholder="Ville"
+                />
+
+                <input
+                  value={profile.address.postalCode}
+                  onChange={e =>
+                    setProfile({
+                      ...profile,
+                      address: {
+                        ...profile.address,
+                        postalCode: e.target.value
+                      }
+                    })
+                  }
+                  placeholder="Code postal"
+                />
+
+                <input
+                  value={profile.address.complement}
+                  onChange={e =>
+                    setProfile({
+                      ...profile,
+                      address: {
+                        ...profile.address,
+                        complement: e.target.value
+                      }
+                    })
+                  }
+                  placeholder="Complément d'adresse"
+                />
+              </div>
               </div>
 
+              <div className="section">
               <h3>Formation</h3>
               <div className="row">
-                <input value={profile.niveau} onChange={e => setProfile({ ...profile, niveau: e.target.value })} placeholder="Niveau" />
-                <input value={profile.specialite} onChange={e => setProfile({ ...profile, specialite: e.target.value })} placeholder="Spécialité" />
+                <input
+                  value={profile.student.niveau}
+                  onChange={e =>
+                    setProfile({
+                      ...profile,
+                      student: {
+                        ...profile.student,
+                        niveau: e.target.value
+                      }
+                    })
+                  }
+                  placeholder="Niveau"
+                />
+
+                <input
+                  value={profile.student.specialite}
+                  onChange={e =>
+                    setProfile({
+                      ...profile,
+                      student: {
+                        ...profile.student,
+                        specialite: e.target.value
+                      }
+                    })
+                  }
+                  placeholder="Spécialité"
+                />
+              </div>
               </div>
 
               <button className="save-btn" onClick={handleSave}>Enregistrer</button>
@@ -216,8 +323,13 @@ export default function StudentProfile() {
               <div className="column">
                 <input
                   placeholder="Email universitaire"
+                  value={profile.student.mail_univ}
                   disabled
                   className="locked-field"
+                />
+                <input
+                  placeholder="Email personnel"
+                  value={profile.email} onChange={e => setProfile({ ...profile, email: e.target.value })}
                 />
                 <input placeholder="+33 Numéro de téléphone" />
               </div>
