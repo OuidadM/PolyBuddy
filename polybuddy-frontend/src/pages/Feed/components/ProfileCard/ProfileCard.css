@@ -199,3 +199,72 @@
     font-size: 20px;
   }
 }
+
+/* Styles supplémentaires pour ProfileCard.css */
+
+.invitation-alert {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fff3cd;
+  border: 1px solid #ffc107;
+  border-radius: 8px;
+  padding: 10px 15px;
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  text-align: center;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.invitation-alert p {
+  margin: 5px 0;
+  font-size: 13px;
+  color: #856404;
+}
+
+.invitation-alert p:first-child {
+  font-weight: 600;
+}
+
+/* Bouton en attente */
+.connect-btn.pending {
+  background: linear-gradient(135deg, #9e9e9e 0%, #757575 100%);
+  cursor: default;
+}
+
+.connect-btn.pending:hover {
+  background: linear-gradient(135deg, #9e9e9e 0%, #757575 100%);
+  transform: translateY(0);
+}
+
+/* Bouton connecté */
+.connect-btn.connected {
+  background: #019EE6;
+  color: white;
+  cursor: default;
+}
+
+.connect-btn.connected:hover {
+  background: #019EE6;
+  color: white;
+  transform: translateY(0);
+  cursor: pointer;
+}
+
+.connect-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+

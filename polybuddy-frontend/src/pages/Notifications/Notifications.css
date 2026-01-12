@@ -1,0 +1,24 @@
+/* src/pages/Notifications/Notifications.css */
+
+.notifications-container {
+  padding: 30px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.invitations-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.invitation-card {
+  padding: 20px;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.invitation-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}

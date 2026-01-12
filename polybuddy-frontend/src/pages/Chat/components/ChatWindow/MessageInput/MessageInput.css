@@ -1,3 +1,5 @@
+/* src/pages/Chat/components/ChatWindow/MessageInput/MessageInput.css */
+
 /* Outer container */
 .message-input-container {
   padding: 0 12px 10px 12px;
@@ -17,10 +19,11 @@
 }
 
 /* Icon buttons inside the input box */
-.message-input-box .input-icon svg {
+.message-input-box .input-icon svg,
+.message-input-box .emoji-icon svg,
+.message-input-box .camera-icon svg {
   color: var(--mui-text-primary);
 }
-
 
 /* TextField styling override */
 .message-textfield .MuiInputBase-root {
@@ -41,6 +44,7 @@
   display: none;
 }
 
+/* Bouton Micro (original) */
 .message-mic-btn.MuiButtonBase-root {
   background-color: var(--mui-secondary-main);
   border-radius: 14px;
@@ -48,4 +52,25 @@
 
 .message-mic-btn svg.MuiSvgIcon-root {
   color: white;
+}
+
+/* Bouton Send (nouveau - même style que mic) */
+.message-send-btn.MuiButtonBase-root {
+  background-color: var(--mui-secondary-main);
+  border-radius: 14px;
+}
+
+.message-send-btn svg.MuiSvgIcon-root {
+  color: white;
+}
+
+/* État désactivé du bouton Send */
+.message-send-btn.MuiButtonBase-root:disabled {
+  background-color: #ccc;
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.message-send-btn.MuiButtonBase-root:disabled svg.MuiSvgIcon-root {
+  color: #999;
 }

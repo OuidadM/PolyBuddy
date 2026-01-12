@@ -26,51 +26,68 @@ const AvatarPlaceholder = ({ size = 50 }) => (
   </Box>
 );
 
-const ChatListItem = ({ item, isLoading, getAvatarUrl, onClick }) => (
-  <ListItem button onClick={onClick} className="chat-list-item">
-    <ListItemAvatar>
-      {isLoading ? (
-        <AvatarPlaceholder />
-      ) : (
-        <Avatar
-          src={getAvatarUrl(item.avatar)}
-          className="cli-avatar"
-        />
-      )}
-    </ListItemAvatar>
+const ChatListItem = ({ item, isLoading, getAvatarUrl, onClick }) => {
+  // Utiliser avatarUrl si disponible (URL complète), sinon utiliser getAvatarUrl
+  const avatarSrc = item.avatarUrl || (item.avatar ? getAvatarUrl(item.avatar) : null);
 
-    <ListItemText
-      className="cli-text"
-      primary={
-        <Typography variant="h7" className="cli-primary">
-          {item.name}
-        </Typography>
-      }
-      secondary={
-        <Typography variant="body2" className="cli-secondary">
-          {item.message}
-        </Typography>
-      }
-    />
+  return (
+    <ListItem button onClick={onClick} className="chat-list-item">
+      <ListItemAvatar>
+        {isLoading ? (
+          <AvatarPlaceholder />
+        ) : (
+          <Avatar
+            src={avatarSrc}
+            className="cli-avatar"
+          >
+            {/* Fallback avec initiales si pas d'avatar */}
+            {!avatarSrc && item.name ? item.name.charAt(0).toUpperCase() : "?"}
+          </Avatar>
+        )}
+      </ListItemAvatar>
 
-    <Stack className="cli-right">
-      <Typography className="cli-time">{item.time}</Typography>
+      <ListItemText
+        className="cli-text"
+        primary={
+          <Typography variant="h7" className="cli-primary">
+            {item.name}
+            {item.isAlumni && (
+              <span style={{ 
+                marginLeft: '6px', 
+                fontSize: '16px',
+                color: '#f5576c'
+              }}>
+                ★
+              </span>
+            )}
+          </Typography>
+        }
+        secondary={
+          <Typography variant="body2" className="cli-secondary">
+            {item.message}
+          </Typography>
+        }
+      />
 
-      {item.hasCheck && (
-        <DoneAllIcon className="cli-check" />
-      )}
+      <Stack className="cli-right">
+        <Typography className="cli-time">{item.time}</Typography>
 
-      {item.badge && (
-        <Box
-          className={`cli-badge ${
-            item.badge === 5 ? "primary" : "alert"
-          }`}
-        >
-          {item.badge}
-        </Box>
-      )}
-    </Stack>
-  </ListItem>
-);
+        {item.hasCheck && (
+          <DoneAllIcon className="cli-check" />
+        )}
+
+        {item.badge && (
+          <Box
+            className={`cli-badge ${
+              item.badge === 5 ? "primary" : "alert"
+            }`}
+          >
+            {item.badge}
+          </Box>
+        )}
+      </Stack>
+    </ListItem>
+  );
+};
 
 export default ChatListItem;

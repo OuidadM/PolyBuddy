@@ -7,38 +7,52 @@ import AvatarPlaceholder from "../../ChatList/AvatarPlaceholder";
 
 import "./ChatHeader.css";
 
-const ChatHeader = ({ isLoading, getAvatarUrl }) => (
-  <Stack direction="row" className="chat-header">
-    {isLoading ? (
-      <AvatarPlaceholder size={75} />
-    ) : (
-      <Avatar
-        src={getAvatarUrl("ellipse11")}
-        className="chat-header-avatar"
-      />
-    )}
+const ChatHeader = ({ isLoading, getAvatarUrl, friend }) => {
+  if (!friend) return null;
 
-    <Box className="chat-header-info">
-      <Typography variant="h5" className="chat-header-name">
-        Anil
-      </Typography>
-      <Typography variant="subtitle2" className="chat-header-status">
-        Online - Last seen, 2.02pm
-      </Typography>
-    </Box>
+  return (
+    <Stack direction="row" className="chat-header">
+      {isLoading ? (
+        <AvatarPlaceholder size={75} />
+      ) : (
+        <Avatar
+          src={friend.avatar || getAvatarUrl("default")}
+          className="chat-header-avatar"
+        />
+      )}
 
-    <IconButton className="chat-header-icon">
-      <PhoneIcon />
-    </IconButton>
+      <Box className="chat-header-info">
+        <Typography variant="h5" className="chat-header-name">
+          {friend.name}
+          {friend.isAlumni && (
+            <span style={{ 
+              marginLeft: '8px', 
+              fontSize: '20px',
+              color: '#f5576c'
+            }}>
+              ★
+            </span>
+          )}
+        </Typography>
+        <Typography variant="subtitle2" className="chat-header-status">
+          {friend.specialite || "Étudiant"}
+          {friend.entreprise && ` • ${friend.entreprise}`}
+        </Typography>
+      </Box>
 
-    <IconButton className="chat-header-icon video">
-      <VideocamIcon />
-    </IconButton>
+      <IconButton className="chat-header-icon">
+        <PhoneIcon />
+      </IconButton>
 
-    <IconButton className="chat-header-icon more">
-      <MoreVertIcon />
-    </IconButton>
-  </Stack>
-);
+      <IconButton className="chat-header-icon video">
+        <VideocamIcon />
+      </IconButton>
+
+      <IconButton className="chat-header-icon more">
+        <MoreVertIcon />
+      </IconButton>
+    </Stack>
+  );
+};
 
 export default ChatHeader;
