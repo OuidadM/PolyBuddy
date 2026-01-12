@@ -1,7 +1,6 @@
+// src/models/Group.js
 const { DataTypes, Model } = require("sequelize");
 const { sequelize } = require("../config/db");
-const Alumni = require("./Alumni");
-const Conversation = require("./Conversation"); 
 
 class Group extends Model {}
 
@@ -50,8 +49,8 @@ Group.init(
       type: DataTypes.UUID,
       allowNull: false,
       references: {
-        model: "conversations",  
-        key: "id"
+        model: "conversations",
+        key: "id_conv"  // ✅ Utilisez la bonne clé primaire
       },
       onDelete: "CASCADE"
     }
@@ -64,11 +63,4 @@ Group.init(
   }
 );
 
-// Relations
-Group.belongsTo(Alumni, { foreignKey: "adminId", as: "admin" });
-
-
-Group.belongsTo(Conversation, { foreignKey: "id_conv", as: "conversation" });
-
 module.exports = Group;
- 

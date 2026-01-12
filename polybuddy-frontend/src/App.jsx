@@ -34,6 +34,7 @@ import RegisterSuccess from './pages/Register/RegisterSuccess.jsx';
 import Feed from './pages/Feed';
 import Chat from './pages/Chat';
 import MainLayout from './pages/components/Layout';
+import Notifications from './pages/Notifications/index.jsx';
 
 /* =======================
    PROFILS
@@ -97,6 +98,17 @@ function App() {
                 </ProtectedRoute>
               }
             />
+
+            {/* Notifications */}
+            <Route
+              path="/notifications"
+              element={
+                <ProtectedRoute allowedRoles={['student', 'alumni']}>
+                  <Notifications />
+                </ProtectedRoute>
+              }
+            />
+
 
             {/* Profile étudiant - Accessible uniquement aux étudiants */}
             <Route

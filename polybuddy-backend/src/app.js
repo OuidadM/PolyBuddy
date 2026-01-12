@@ -9,6 +9,8 @@ const authRoutes = require('./routes/auth.routes');
 const adminRoutes = require('./routes/admin.routes');
 const profileRoutes = require("./routes/profile.routes");
 const feedRoutes = require("./routes/feed.routes");
+const invitationRoutes = require("./routes/invitation.routes");
+const conversationRoutes = require("./routes/conversation.routes"); // ✅ NOUVEAU
 
 const app = express();
 
@@ -39,7 +41,8 @@ app.use('/api/auth', authRoutes);       // login, register, logout
 app.use('/api/admin', adminRoutes);     // routes protégées admin
 app.use("/api/profile", profileRoutes);
 app.use('/api/feed', feedRoutes); 
-
+app.use('/api/invitations', invitationRoutes); 
+app.use('/api/conversations', conversationRoutes); // ✅ NOUVEAU
 
 /**
  * ================================

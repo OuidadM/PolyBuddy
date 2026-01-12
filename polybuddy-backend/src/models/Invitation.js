@@ -1,6 +1,6 @@
 const { DataTypes, Model } = require("sequelize");
 const { sequelize } = require("../config/db");
-const Etudiant = require('./Student');   
+const Student = require('./Student');   
 
 class Invitation extends Model {}
 
@@ -16,7 +16,7 @@ Invitation.init(
       type: DataTypes.UUID,
       allowNull: false,
       references: {
-        model: 'etudiants',   
+        model: 'students',   
         key: 'id'
       },
       onDelete: 'CASCADE'
@@ -26,7 +26,7 @@ Invitation.init(
       type: DataTypes.UUID,
       allowNull: false,
       references: {
-        model: 'etudiants',   
+        model: 'students',   
         key: 'id'
       },
       onDelete: 'CASCADE'
@@ -58,12 +58,12 @@ Invitation.init(
   }
 );
 
-Invitation.belongsTo(Etudiant, {foreignKey: 'expediteurId',as: 'expediteur'});
+Invitation.belongsTo(Student, {foreignKey: 'expediteurId',as: 'expediteur'});
 
-Invitation.belongsTo(Etudiant, {foreignKey: 'destinataireId',as: 'destinataire'});
+Invitation.belongsTo(Student, {foreignKey: 'destinataireId',as: 'destinataire'});
 
-Etudiant.hasMany(Invitation, {foreignKey: 'expediteurId',as: 'invitationsEnvoyees'});
+Student.hasMany(Invitation, {foreignKey: 'expediteurId',as: 'invitationsEnvoyees'});
 
-Etudiant.hasMany(Invitation, {foreignKey: 'destinataireId',as: 'invitationsRecues'});
+Student.hasMany(Invitation, {foreignKey: 'destinataireId',as: 'invitationsRecues'});
 
 module.exports = Invitation;

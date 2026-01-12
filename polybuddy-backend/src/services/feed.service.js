@@ -43,25 +43,28 @@ class FeedService {
 
       // Récupérer les IDs des amis existants
       const friendIds = await this.getFriendIds(userId);
-      const excludeIds = [...friendIds, userId];
+      const excludeIds = [userId]; // on exclut seulement soi-même
 
       // 1️⃣ Étudiants de la même spécialité (non-alumni)
       const sameSpecialty = await this.getSameSpecialtyStudents(
         userSpecialty,
-        excludeIds
+        excludeIds,
+        friendIds
       );
 
       // 2️⃣ Alumni de la même spécialité
       const alumniSpecialty = await this.getAlumniBySpecialty(
         userSpecialty,
-        excludeIds
-      );
+        excludeIds,
+        friendIds
+        );
 
-      // 3️⃣ Personnes partageant au moins un centre d'intérêt
       const sharedInterests = await this.getUsersBySharedInterests(
         userInterests,
-        excludeIds
-      );
+        excludeIds,
+        friendIds
+        );
+
 
       return {
         sameSpecialty,
@@ -112,78 +115,95 @@ class FeedService {
   /**
    * Étudiants de la même spécialité (non-alumni)
    */
-  static async getSameSpecialtyStudents(specialty, excludeIds) {
-    const students = await Student.findAll({
-      where: {
-        specialite: specialty,
-        id: { [Op.notIn]: excludeIds },
-        verification_status: "verifie"
-      },
-      include: [
-        {
-          model: User,
-          as: "user",
-          where: {
-            account_status: "active",
-            role: "student"
-          },
-          attributes: ["id", "prenom", "nom", "avatar_url"]
+  /**
+ * Étudiants de la même spécialité (non-alumni)
+ */
+static async getSameSpecialtyStudents(specialty, excludeIds, friendIds) {
+  const students = await Student.findAll({
+    where: {
+      specialite: specialty,
+      id: { [Op.notIn]: excludeIds },
+      verification_status: "verifie"
+    },
+    include: [
+      {
+        model: User,
+        as: "user",
+        where: {
+          account_status: "active",
+          role: "student"
         },
-        {
-          model: Alumni,
-          as: "alumni",
-          required: false,
-          where: { id: null } // Exclure les alumni
-        }
-      ],
-      limit: 10
-    });
+        attributes: ["id", "prenom", "nom", "avatar_url"]
+      },
+      {
+        model: Alumni,
+        as: "alumni",
+        required: false,
+        where: { id: null } // exclure les alumni
+      }
+    ],
+    limit: 10
+  });
 
-    return Promise.all(
-      students.map(async (s) => ({
+  return Promise.all(
+    students.map(async (s) => {
+      const isFriend = friendIds.includes(s.user.id);
+
+      return {
         id: s.user.id,
         name: `${s.user.prenom} ${s.user.nom}`,
-        role: s.niveau ? `Étudiant - Niveau ${s.niveau}` : "Étudiant",
+        role: s.niveau
+          ? `Étudiant - Niveau ${s.niveau}`
+          : "Étudiant",
         specialite: s.specialite,
         avatar_url: s.user.avatar_url,
         isAlumni: false,
+        isFriend, // ✅ AJOUT
         mutualFriends: await this.countFriends(s.user.id)
-      }))
-    );
-  }
+      };
+    })
+  );
+}
+
 
   /**
    * Alumni de la même spécialité
    */
-  static async getAlumniBySpecialty(specialty, excludeIds) {
-    const alumni = await Student.findAll({
-      where: {
-        specialite: specialty,
-        id: { [Op.notIn]: excludeIds },
-        verification_status: "verifie"
-      },
-      include: [
-        {
-          model: User,
-          as: "user",
-          where: {
-            account_status: "active",
-            role: "alumni"
-          },
-          attributes: ["id", "prenom", "nom", "avatar_url"]
+  /**
+ * Alumni de la même spécialité
+ */
+static async getAlumniBySpecialty(specialty, excludeIds, friendIds) {
+  const alumni = await Student.findAll({
+    where: {
+      specialite: specialty,
+      id: { [Op.notIn]: excludeIds },
+      verification_status: "verifie"
+    },
+    include: [
+      {
+        model: User,
+        as: "user",
+        where: {
+          account_status: "active",
+          role: "alumni"
         },
-        {
-          model: Alumni,
-          as: "alumni",
-          required: true,
-          attributes: ["annee_diplome", "position", "entreprise"]
-        }
-      ],
-      limit: 10
-    });
+        attributes: ["id", "prenom", "nom", "avatar_url"]
+      },
+      {
+        model: Alumni,
+        as: "alumni",
+        required: true,
+        attributes: ["annee_diplome", "position", "entreprise"]
+      }
+    ],
+    limit: 10
+  });
 
-    return Promise.all(
-      alumni.map(async (a) => ({
+  return Promise.all(
+    alumni.map(async (a) => {
+      const isFriend = friendIds.includes(a.user.id);
+
+      return {
         id: a.user.id,
         name: `${a.user.prenom} ${a.user.nom}`,
         role: a.alumni.position || "Alumni",
@@ -192,66 +212,79 @@ class FeedService {
         annee_diplome: a.alumni.annee_diplome,
         avatar_url: a.user.avatar_url,
         isAlumni: true,
+        isFriend, // ✅ AJOUT
         mutualFriends: await this.countFriends(a.user.id)
-      }))
-    );
-  }
+      };
+    })
+  );
+}
+
 
   /**
    * Utilisateurs partageant au moins un centre d'intérêt
    */
-  static async getUsersBySharedInterests(userInterests, excludeIds) {
-    if (!userInterests || userInterests.length === 0) {
-      return [];
-    }
-
-    const users = await Student.findAll({
-      where: {
-        id: { [Op.notIn]: excludeIds },
-        verification_status: "verifie",
-        centres_interet: {
-          [Op.overlap]: userInterests // PostgreSQL array overlap
-        }
-      },
-      include: [
-        {
-          model: User,
-          as: "user",
-          where: { account_status: "active" },
-          attributes: ["id", "prenom", "nom", "avatar_url", "role"]
-        },
-        {
-          model: Alumni,
-          as: "alumni",
-          required: false,
-          attributes: ["annee_diplome", "position", "entreprise"]
-        }
-      ],
-      limit: 10
-    });
-
-    return Promise.all(
-      users.map(async (u) => {
-        const sharedInterests = u.centres_interet.filter((i) =>
-          userInterests.includes(i)
-        );
-
-        return {
-          id: u.user.id,
-          name: `${u.user.prenom} ${u.user.nom}`,
-          role: u.user.role === "alumni" 
-            ? u.alumni?.position || "Alumni"
-            : u.niveau ? `Étudiant - Niveau ${u.niveau}` : "Étudiant",
-          specialite: u.specialite,
-          avatar_url: u.user.avatar_url,
-          isAlumni: u.user.role === "alumni",
-          sharedInterests: sharedInterests,
-          sharedInterestsCount: sharedInterests.length,
-          mutualFriends: await this.countFriends(u.user.id)
-        };
-      })
-    );
+  /**
+ * Utilisateurs partageant au moins un centre d'intérêt
+ */
+static async getUsersBySharedInterests(userInterests, excludeIds, friendIds) {
+  if (!userInterests || userInterests.length === 0) {
+    return [];
   }
+
+  const users = await Student.findAll({
+    where: {
+      id: { [Op.notIn]: excludeIds },
+      verification_status: "verifie",
+      centres_interet: {
+        [Op.overlap]: userInterests
+      }
+    },
+    include: [
+      {
+        model: User,
+        as: "user",
+        where: { account_status: "active" },
+        attributes: ["id", "prenom", "nom", "avatar_url", "role"]
+      },
+      {
+        model: Alumni,
+        as: "alumni",
+        required: false,
+        attributes: ["annee_diplome", "position", "entreprise"]
+      }
+    ],
+    limit: 10
+  });
+
+  return Promise.all(
+    users.map(async (u) => {
+      const sharedInterests = u.centres_interet.filter((i) =>
+        userInterests.includes(i)
+      );
+
+      const isFriend = friendIds.includes(u.user.id);
+
+      return {
+        id: u.user.id,
+        name: `${u.user.prenom} ${u.user.nom}`,
+        role:
+          u.user.role === "alumni"
+            ? u.alumni?.position || "Alumni"
+            : u.niveau
+            ? `Étudiant - Niveau ${u.niveau}`
+            : "Étudiant",
+        specialite: u.specialite,
+        avatar_url: u.user.avatar_url,
+        isAlumni: u.user.role === "alumni",
+        isFriend, // ✅ AJOUT
+        sharedInterests,
+        sharedInterestsCount: sharedInterests.length,
+        mutualFriends: await this.countFriends(u.user.id)
+      };
+    })
+  );
+}
+
 }
 
 module.exports = FeedService;

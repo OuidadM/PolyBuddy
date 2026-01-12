@@ -1,7 +1,6 @@
+// src/models/Conversation.js
 const { DataTypes, Model } = require("sequelize");
 const { sequelize } = require("../config/db");
-const Student = require('./Student');
-const Group = require('./Group');
 
 class Conversation extends Model {}
 
@@ -23,33 +22,8 @@ Conversation.init({
 }, {
   sequelize,
   modelName: 'Conversation',
-  tableName: 'conversations'
+  tableName: 'conversations',
+  timestamps: false
 });
-
-Conversation.belongsToMany(Student, { 
-  through: "ConversationParticipants",
-  as: "participants",
-  foreignKey: "conversationId"
-});
-
-Student.belongsToMany(Conversation, { 
-  through: "ConversationParticipants",
-  as: "conversations",
-  foreignKey: "studentId"
-});
-
-
-Conversation.hasOne(Group, { 
-  foreignKey: "conversationId",
-  as: "groupDetails",
-  onDelete: "CASCADE"
-});
-
-
-const Message = require('./Message');  
-
-Conversation.hasMany(Message, {foreignKey: 'conversationId',as: 'messages',onDelete: 'CASCADE'});
-
-Message.belongsTo(Conversation, {foreignKey: 'conversationId',as: 'conversation'});
 
 module.exports = Conversation;
