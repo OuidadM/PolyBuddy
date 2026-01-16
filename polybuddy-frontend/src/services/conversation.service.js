@@ -1,4 +1,3 @@
-// src/services/conversation.service.js
 import axios from 'axios';
 
 const API_URL = 'http://localhost:5000/api';
@@ -11,6 +10,10 @@ const axiosConfig = {
 };
 
 const conversationService = {
+  /* =========================
+     FRIENDS & CONVERSATIONS
+     ========================= */
+
   // Récupérer tous les amis
   async getFriends() {
     try {
@@ -84,6 +87,74 @@ const conversationService = {
       const response = await axios.put(
         `${API_URL}/conversations/${conversationId}/read`,
         {},
+        axiosConfig
+      );
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error;
+    }
+  },
+
+  /* =========================
+     GROUPS
+     ========================= */
+
+  // Récupérer les groupes
+  async getGroups() {
+    try {
+      const response = await axios.get(
+        `${API_URL}/conversations/groups`,
+        axiosConfig
+      );
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error;
+    }
+  },
+
+  // Créer un groupe (alumni)
+  async createGroup(payload) {
+    try {
+      const response = await axios.post(
+        `${API_URL}/conversations/groups`,
+        payload,
+        axiosConfig
+      );
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error;
+    }
+  },
+
+  /* =========================
+     SEARCH
+     ========================= */
+
+  // Rechercher des étudiants / alumni
+  async searchStudents(params) {
+    try {
+      const response = await axios.get(
+        `${API_URL}/conversations/students/search`,
+        {
+          ...axiosConfig,
+          params
+        }
+      );
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error;
+    }
+  },
+
+  /* =========================
+     NOTIFICATIONS
+     ========================= */
+
+  // Compter les messages non lus
+  async getUnreadCount() {
+    try {
+      const response = await axios.get(
+        `${API_URL}/conversations/unread-count`,
         axiosConfig
       );
       return response.data;

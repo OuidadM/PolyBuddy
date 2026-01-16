@@ -3,20 +3,35 @@
   justify-content: center;
   flex-direction: column;
   align-items: center;
-}
-.cloud-section img{
   width: 100%;
+  position: relative; /* ✅ AJOUTÉ */
+  margin-top: -1px; /* ✅ Évite les espaces blancs */
 }
+
+.cloud-section img {
+  width: 100%;
+  display: block; /* ✅ AJOUTÉ: Évite les espaces sous l'image */
+}
+
 .cloud-frame {
   background: white;
   color: #1d3039;
-  padding-bottom: 90px;
+  padding: 40px 20px 90px; /* ✅ MODIFIÉ: Ajout padding-top */
   text-align: center;
   width: 100%;
+  position: relative; /* ✅ AJOUTÉ */
 }
-.cloud-section h2{
+
+.cloud-section h2 {
   font-weight: 800;
   font-size: 80px;
   color: #254B70;
-  margin: 10px;
+  margin: 10px 0 30px; /* ✅ MODIFIÉ: Meilleur espacement */
+}
+
+/* ✅ AJOUTÉ: Responsive */
+@media (max-width: 768px) {
+  .cloud-section h2 {
+    font-size: 48px;
+  }
 }

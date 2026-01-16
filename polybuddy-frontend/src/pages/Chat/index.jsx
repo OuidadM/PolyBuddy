@@ -9,6 +9,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import {Divider} from "@mui/material";
 
 import GroupsList from "./components/ChatList/GroupsList"
+import CreateGroupModal from "./components/CreateGroupModal/index.jsx";
 import PeopleList from "./components/ChatList/PeopleList";
 import ChatHeader from "./components/ChatWindow/ChatHeader";
 import ChatMessages from "./components/ChatWindow/ChatMessages";
@@ -20,6 +21,7 @@ import "./Chat.css";
 const Messaging = () => {
   const [groups, setGroups] = useState([]);
   const [loadingGroups, setLoadingGroups] = useState(true);
+  const [openCreateGroup, setOpenCreateGroup] = useState(false);
   const [friends, setFriends] = useState([]);
   const [selectedFriend, setSelectedFriend] = useState(null);
   const [currentConversationId, setCurrentConversationId] = useState(null);
@@ -188,7 +190,16 @@ const Messaging = () => {
               }
             }}
             canCreateGroup={user?.role === 'alumni'}
+            onCreateGroup={() => setOpenCreateGroup(true)}
           />
+
+          {openCreateGroup && (
+          <CreateGroupModal
+            open={openCreateGroup}
+            onClose={() => setOpenCreateGroup(false)}
+            onCreated={loadGroups}
+          />
+        )}
 
           <Divider sx={{ my: 2 }} />
           <PeopleList

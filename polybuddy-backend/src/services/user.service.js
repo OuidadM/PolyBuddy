@@ -85,10 +85,14 @@ class UserService {
         prenom: user.prenom,
         nom: user.nom,
         role: user.role,
-        langue: user.langue
+        langue: user.langue,
+        avatar_url: user.avatar_url
+
       }
     };
   }
 }
+
+
 
 module.exports = UserService;

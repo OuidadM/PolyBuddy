@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Avatar, Box, IconButton, Paper, Stack, CircularProgress, Badge } from "@mui/material";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "../../../auth/AuthContext";
 import invitationService from "../../../services/invitation.service";
+import conversationService from "../../../services/conversation.service";
 
 import HomeIcon from "@mui/icons-material/Home";
 import ChatIcon from "@mui/icons-material/Chat";
@@ -19,12 +21,29 @@ const AvatarPlaceholder = ({ size = 78 }) => (
 const Sidebar = ({ isLoading, getAvatarUrl }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { user, loading: authLoading, logout } = useAuth(); // ✅ Ajout de logout
   const [notificationCount, setNotificationCount] = useState(0);
+  const [unreadMessagesCount, setUnreadMessagesCount] = useState(0);
+
+  useEffect(() => {
+    console.log("USER depuis useAuth :", user);
+  }, [user]);
+
+  getAvatarUrl = (avatarUrl) => {
+    if (!avatarUrl) {
+      return "/default-avatar.png";
+    }
+    return avatarUrl;
+  };
 
   useEffect(() => {
     loadNotificationCount();
+    loadUnreadMessagesCount();
     // Rafraîchir toutes les 30 secondes
-    const interval = setInterval(loadNotificationCount, 30000);
+    const interval = setInterval(() => {
+      loadNotificationCount();
+      loadUnreadMessagesCount();
+    }, 30000);
     return () => clearInterval(interval);
   }, []);
 
@@ -37,21 +56,47 @@ const Sidebar = ({ isLoading, getAvatarUrl }) => {
     }
   };
 
+  const loadUnreadMessagesCount = async () => {
+    try {
+      const response = await conversationService.getUnreadCount();
+      setUnreadMessagesCount(response.data?.unreadCount || 0);
+    } catch (error) {
+      console.error("Erreur chargement messages non lus:", error);
+    }
+  };
+
   const isActive = (path) => location.pathname === path;
   
   const handleNotificationClick = () => {
     navigate('/notifications');
-    loadNotificationCount(); // Rafraîchir après avoir cliqué
+    loadNotificationCount();
+  };
+
+  const handleChatClick = () => {
+    navigate('/chat');
+    loadUnreadMessagesCount();
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      console.log("✅ Déconnexion réussie");
+    } catch (error) {
+      console.error("❌ Erreur lors de la déconnexion:", error);
+    }
   };
 
   return (
     <Paper elevation={0} className="sidebar-root">
-      {isLoading ? (
+      {isLoading || authLoading ? (
         <AvatarPlaceholder size={78} />
       ) : (
         <Avatar
-          src={getAvatarUrl('ellipse1')}
+          src={getAvatarUrl(user?.avatar_url)}
+          alt={`${user?.prenom} ${user?.nom}`}
           className="sidebar-avatar"
+          onClick={() => navigate("/profile")}
+          sx={{ cursor: "pointer" }}
         />
       )}
 
@@ -70,14 +115,20 @@ const Sidebar = ({ isLoading, getAvatarUrl }) => {
         {/* CHAT */}
         <Box className={isActive('/chat') ? "sidebar-icon-primary" : ""}>
           <IconButton 
-            onClick={() => navigate('/chat')}
+            onClick={handleChatClick}
             className={`sidebar-icon ${isActive('/chat') ? 'sidebar-icon-selected' : ''}`}
           >
-            <ChatIcon sx={{ fontSize: 40 }} />
+            <Badge 
+              badgeContent={unreadMessagesCount} 
+              color="error"
+              max={99}
+            >
+              <ChatIcon sx={{ fontSize: 40 }} />
+            </Badge>
           </IconButton>
         </Box>
 
-        {/* NOTIFICATIONS avec Badge */}
+        {/* NOTIFICATIONS */}
         <Box className={isActive('/notifications') ? "sidebar-icon-primary" : ""}>
           <IconButton 
             className={`sidebar-icon ${isActive('/notifications') ? 'sidebar-icon-selected' : ''}`}
@@ -105,10 +156,9 @@ const Sidebar = ({ isLoading, getAvatarUrl }) => {
 
       </Stack>
 
-      {/* LOGOUT */}
       <IconButton 
         className="sidebar-logout" 
-        onClick={() => navigate('/')} 
+        onClick={handleLogout}
       >
         <LogoutIcon sx={{ fontSize: 40 }} />
       </IconButton>

@@ -57,6 +57,7 @@ class StudentService {
             include: [
               {
                 model: Address,
+                as: "address",
                 attributes: ['street', 'city', 'postalCode']
               }
             ]

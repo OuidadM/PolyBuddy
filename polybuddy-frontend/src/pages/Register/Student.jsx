@@ -121,10 +121,9 @@ export default function RegisterStudent() {
     }
 
     try {
-      const response = await authService.register(multipartData);
+      const response = await authService.register(multipartData );
       navigate("/register/success", {
         state: {
-          status: response.status,
           message: response.message
         }
       });

@@ -1,13 +1,36 @@
-/* Main Page Container */
-.feed-container {
-  background-color: #EFF6FC;
+/* ✅ Styles pour la Landing Page */
+.page {
+  width: 100%;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  overflow-x: hidden;
+  overflow-y: visible; /* ✅ CRITIQUE: Permet le scroll */
+  position: relative;
 }
 
-/* Navbar positioning */
+/* ✅ Section des features */
+.features {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+  padding: 80px 20px;
+  background: var(--background-color);
+  position: relative;
+  z-index: 1;
+}
+
+/* ========================================
+   STYLES POUR LE FEED (autre page)
+   ======================================== */
+.feed-container {
+  background-color: #EFF6FC;
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
 .feed-navbar-wrapper {
   position: sticky;
   top: 0;
@@ -15,38 +38,32 @@
   background-color: #EFF6FC; 
 }
 
-/* Flex container for Sidebar + Content */
 .feed-content {
   display: flex;
   flex-grow: 1;
   padding: 20px;
   gap: 30px; 
-  height: calc(100vh - 80px); /* Adjust based on navbar height */
+  height: calc(100vh - 80px);
 }
 
-/* Wrapper for Sidebar to keep it stable */
 .feed-sidebar-wrapper {
   flex-shrink: 0;
   width: auto; 
 }
 
-/* The area containing the Grid */
 .feed-grid-area {
   flex-grow: 1;
-  overflow-y: auto; /* Scrollable area */
+  overflow-y: auto;
   padding-right: 10px; 
 }
 
-/* The actual Grid Layout */
 .profiles-grid {
   display: grid;
-  /* Responsive columns: roughly 260px wide each */
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 25px;
   padding-bottom: 40px;
 }
 
-/* Custom Scrollbar for the feed area */
 .feed-grid-area::-webkit-scrollbar {
   width: 8px;
 }

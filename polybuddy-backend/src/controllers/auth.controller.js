@@ -139,7 +139,7 @@ exports.login = async (req, res) => {
       sameSite: "lax",
       maxAge: 60 * 60 * 1000
     });
-
+    console.log("result.user : ",result.user);
     return res.status(200).json({
       success: true,
       user: result.user
