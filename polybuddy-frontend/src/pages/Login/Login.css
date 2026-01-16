@@ -5,7 +5,7 @@
   width: 100%;
   background: #1D3039;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
   animation: fadeIn 0.9s ease-out;
 }
 
@@ -36,10 +36,13 @@
 .avatar {
   position: absolute;
   border-radius: 50%;
-  opacity: 0.95;
+  opacity: 1;
   animation: floatSoft 6s ease-in-out infinite;
-  filter: drop-shadow(0 18px 35px rgba(0,0,0,0.25));
-  transition: transform 0.6s ease;
+  filter: drop-shadow(0 20px 40px rgba(0,0,0,0.4));
+  border: 2px solid white;
+  flex-shrink: 0;
+  min-width: 60px;
+  min-height: 60px;
 }
 
 /* ANIMATION DOUCE */
@@ -58,29 +61,29 @@
 
 /* POSITIONS & TAILLES */
 .avatar-orange {
-  width: 180px;
-  height: 180px;
-  top: 20px;
-  right: 40px;
+  width: 500px;
+  height: 220px;
+  top: 30px;
+  right: 60px;
   opacity: 0.95;
   animation-delay: 0.4s;
   z-index: 3;
 }
 
 .avatar-violet {
-  width: 200px;
-  height: 200px;
-  top: 40px;
-  left: 30px;
+  width: 240px;
+  height: 240px;
+  top: 50px;
+  left: 20px;
   animation-delay: 1s;
   z-index: 4;
 }
 
 .avatar-mauve {
-  width: 180px;
-  height: 180px;
+  width: 200px;
+  height: 200px;
   top: 50%;
-  left: 60px;
+  left: 50px;
   transform: translateY(-50%);
   animation: floatSoft 6s ease-in-out infinite;
   animation-delay: 0.8s;
@@ -97,10 +100,10 @@
 }
 
 .avatar-saumon {
-  width: 200px;
-  height: 200px;
-  bottom: 40px;
-  right: 20px;
+  width: 240px;
+  height: 240px;
+  bottom: 50px;
+  right: 40px;
   opacity: 0.95;
   animation-delay: 0.6s;
   z-index: 3;
@@ -109,6 +112,9 @@
 /* RIGHT SIDE */
 .right-side {
   width: 60%;
+  height: 100vh;
+  overflow-y: auto;
+  justify-content: center;
   background: #e9f2fb;
   border-top-left-radius: 120px;
   border-bottom-left-radius: 120px;

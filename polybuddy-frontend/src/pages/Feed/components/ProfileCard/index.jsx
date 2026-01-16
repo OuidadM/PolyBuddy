@@ -64,7 +64,7 @@ const ProfileCard = ({
   const getButtonContent = () => {
     switch (invitationStatus) {
       case 'friends':
-        return 'Message';
+        return 'Connecté';
       case 'pending_sent':
         return (
           <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -111,10 +111,11 @@ const ProfileCard = ({
         {isAlumni && (
           <div className="alumni-badge-card">★</div>
         )}
-      </div>
-
-      <div className="avatar-container">
-        <img src={image} alt={name} className="avatar" />
+        
+        {/* Avatar intégré dans le header */}
+        <div className="avatar-container">
+          <img src={image} alt={name} className="avatar" />
+        </div>
       </div>
 
       <div className="card-body">
@@ -123,16 +124,6 @@ const ProfileCard = ({
         
         {specialite && (
           <p className="profile-info">
-            <img
-              src="https://img.icons8.com/color-pixels/32/book.png"
-              alt="book"
-              style={{
-                width: "20px",
-                height: "20px",
-                verticalAlign: "middle",
-                marginRight: "8px"
-              }}
-            />
             {specialite}
           </p>
         )}
@@ -174,7 +165,7 @@ const ProfileCard = ({
         <button 
           className={`connect-btn ${invitationStatus === 'pending_sent' ? 'pending' : ''} ${invitationStatus === 'friends' ? 'connected' : ''}`}
           onClick={handleConnect}
-          disabled={loading}
+          disabled={loading || invitationStatus === 'friends'}
         >
           {loading ? 'Envoi...' : getButtonContent()}
         </button>

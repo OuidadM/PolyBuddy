@@ -1,3 +1,17 @@
+/* ✅ Au début du fichier */
+body {
+  background: #1d3039 !important;
+  min-height: 100vh;
+}
+
+.admin-container {
+  min-height: 100vh;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  background: transparent; /* ✅ Pas de background ici */
+}
+
 :root {
   --primary-blue: #2563eb;
   --bg-gray: #f3f4f6;
@@ -5,18 +19,20 @@
   --red-btn: #f44336;
   --border-color: #e5e7eb;
 }
-body, html, .admin-page {
-  color: black;
-}
+
+/* ✅ ARRIÈRE-PLAN DARK BLUE */
 .admin-container {
+  background: #1d3039; /* ✅ Dark blue comme Polybuddy */
+  min-height: 100vh;
   max-width: 1100px;
   margin: 0 auto;
+  padding: 40px 20px;
 }
 
 .admin-header h1 {
   font-size: 1.2rem;
   margin-bottom: 25px;
-  color: white;
+  color: white; /* ✅ Texte blanc sur fond dark */
 }
 
 .filter-tabs {
@@ -35,6 +51,7 @@ body, html, .admin-page {
   cursor: pointer;
   font-weight: 500;
   transition: 0.3s;
+  color: #374151;
 }
 
 .filter-tabs button.active {
@@ -42,10 +59,15 @@ body, html, .admin-page {
   color: white;
 }
 
+.filter-tabs button:hover {
+  background: rgba(37, 99, 235, 0.1);
+}
+
+/* ✅ TABLEAU BLANC */
 .table-wrapper {
-  background: white;
+  background: white; /* ✅ Tableau reste blanc */
   border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
   overflow: hidden;
 }
 
@@ -66,6 +88,7 @@ body, html, .admin-page {
 .admin-table td {
   padding: 12px 15px;
   border-bottom: 1px solid var(--border-color);
+  color: #333;
 }
 
 .user-cell {
@@ -83,11 +106,16 @@ body, html, .admin-page {
   font-size: 0.8rem;
   background: #f3f4f6;
   border: 1px solid #ddd;
+  color: #374151;
 }
 
 .email-link {
   color: var(--primary-color);
   text-decoration: none;
+}
+
+.email-link:hover {
+  text-decoration: underline;
 }
 
 .action-btns {
@@ -101,16 +129,39 @@ body, html, .admin-page {
   border-radius: 4px;
   color: white;
   cursor: pointer;
+  transition: 0.3s;
 }
 
-.btn-accept { background: var(--green-btn); }
-.btn-refuse { background: var(--red-btn); }
+.btn-accept { 
+  background: var(--green-btn); 
+}
+
+.btn-accept:hover {
+  background: #45a049;
+}
+
+.btn-refuse { 
+  background: var(--red-btn); 
+}
+
+.btn-refuse:hover {
+  background: #da190b;
+}
 
 .icon-btn {
   background: none;
   border: none;
   font-size: 1.1rem;
   cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.icon-btn:hover {
+  transform: scale(1.2);
+}
+
+.row-selected {
+  background: #f8fafc;
 }
 
 .detail-row {
@@ -129,39 +180,15 @@ body, html, .admin-page {
 .details-content li {
   margin-bottom: 8px;
   font-size: 0.9rem;
+  color: #374151;
 }
 
-/* Modale */
-.modal-overlay {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.details-content strong {
+  color: #1f2937;
 }
-
-.modal-content {
-  background: white;
-  width: 500px;
-  border-radius: 12px;
-  padding: 20px;
-}
-
-.placeholder-doc {
-  height: 200px;
-  background: #eee;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 20px;
-  border: 2px dashed #ccc;
-}
-
-/* Ajoutez ces styles à votre AdminPanel.css existant */
 
 /* ================================
-   AMÉLIORATION DU MODAL UNIQUEMENT
+   MODAL STYLES (BLANC)
 ================================ */
 
 .modal-overlay {
@@ -179,7 +206,7 @@ body, html, .admin-page {
 }
 
 .modal-content {
-  background: white;
+  background: white; /* ✅ Modal blanc */
   border-radius: 12px;
   width: 90%;
   max-width: 900px;
@@ -202,11 +229,11 @@ body, html, .admin-page {
   margin: 0;
   font-size: 18px;
   color: #2c3e50;
-  font-weight: 400; /* ✅ Font weight réduit */
+  font-weight: 400;
 }
 
 .modal-body {
-  padding: 20px; /* ✅ Marge entre titre et contenu */
+  padding: 20px;
   background: #ffffff;
   overflow: auto;
   max-height: calc(85vh - 80px);
@@ -215,10 +242,17 @@ body, html, .admin-page {
 /* Boutons de zoom */
 .zoom-btn {
   transition: all 0.2s ease;
+  padding: 5px 10px;
+  background: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 18px;
+  color: #333;
 }
 
 .zoom-btn:hover {
-  background: #e0e0e0 !important;
+  background: #e0e0e0;
   transform: translateY(-1px);
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
@@ -227,7 +261,7 @@ body, html, .admin-page {
   transform: translateY(0);
 }
 
-/* Bouton fermer amélioré */
+/* Bouton fermer */
 .close-btn {
   font-size: 28px;
   font-weight: 300;
@@ -245,7 +279,7 @@ body, html, .admin-page {
   transform: rotate(90deg);
 }
 
-/* Scrollbar personnalisée pour modal-body */
+/* Scrollbar personnalisée */
 .modal-body::-webkit-scrollbar {
   width: 8px;
 }
@@ -285,7 +319,7 @@ body, html, .admin-page {
   }
 }
 
-/* Placeholder amélioré */
+/* Placeholder */
 .placeholder-doc {
   display: flex;
   align-items: center;
@@ -299,7 +333,15 @@ body, html, .admin-page {
   border: 2px dashed #ccc;
 }
 
-/* Responsive pour les petits écrans */
+/* Zoom level indicator */
+.modal-header span {
+  font-size: 14px;
+  color: #666;
+  min-width: 50px;
+  text-align: center;
+}
+
+/* Responsive */
 @media (max-width: 768px) {
   .modal-content {
     width: 95%;
@@ -319,5 +361,9 @@ body, html, .admin-page {
   .zoom-btn {
     padding: 4px 8px !important;
     font-size: 14px !important;
+  }
+
+  .admin-container {
+    padding: 20px 10px;
   }
 }

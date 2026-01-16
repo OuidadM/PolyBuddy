@@ -10,23 +10,33 @@
   text-align: center;
   color: white;
   min-height: 320px;
+  animation: none !important;
 }
 
 .card-header {
   width: 100%;
-  height: 80px;
+  height: 110px; /* a changer*/
   background-color: #2c3e50; /* Fallback color */
   background-size: cover;
   background-position: center;
-  overflow: hidden;
+  position: relative;
+  /*overflow: hidden;*/
+  animation: none !important;
 }
 
 .avatar-container {
-  margin-top: -40px;
-  padding: 3px;
-  background-color: #1D232A;
+  position: absolute;
+  bottom: 75%; /* fait descendre l’avatar */
+  left: 37%;
+  /*transform: translateX(-50%);*/
+  
+  padding: 4px;
+  /*background-color: #1D232A;*/
   border-radius: 50%;
-  z-index: 5;
+  z-index: 6;
+  pointer-events: none; /* évite tout "bougé" */
+  animation: none !important;
+  transform: none !important;
 }
 
 .avatar {
@@ -35,6 +45,8 @@
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid #fff;
+  animation: none !important;
+  transform: none !important;
 }
 
 .card-body {
@@ -91,10 +103,20 @@
   color: white;
   border: none;
   border-radius: 50%;
-  width: 25px;
-  height: 25px;
+  width: 28px;
+  height: 28px;
   cursor: pointer;
   z-index: 10;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.close-btn:hover {
+  background: rgba(0,0,0,0.8);
+  transform: scale(1.1);
 }
 
 /* Ajoutez ces styles à votre ProfileCard.css existant */
@@ -103,7 +125,7 @@
 .alumni-badge-card {
   position: absolute;
   top: 10px;
-  right: 10px;
+  left: 10px;
   background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
   color: white;
   width: 40px;
@@ -119,14 +141,14 @@
   animation: pulse 2s ease-in-out infinite;
 }
 
-@keyframes pulse {
+/*@keyframes pulse {
   0%, 100% {
     transform: scale(1);
   }
   50% {
     transform: scale(1.1);
   }
-}
+}*/
 
 /* Informations supplémentaires */
 .profile-info {
@@ -217,7 +239,7 @@
   animation: slideDown 0.3s ease-out;
 }
 
-@keyframes slideDown {
+/*@keyframes slideDown {
   from {
     opacity: 0;
     transform: translateX(-50%) translateY(-10px);
@@ -226,7 +248,7 @@
     opacity: 1;
     transform: translateX(-50%) translateY(0);
   }
-}
+}*/
 
 .invitation-alert p {
   margin: 5px 0;
@@ -267,4 +289,3 @@
   opacity: 0.7;
   cursor: not-allowed;
 }
-

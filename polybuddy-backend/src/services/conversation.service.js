@@ -245,36 +245,150 @@ const conversationService = {
   },
 
   // Récupérer les groupes de l'utilisateur
-    async getUserGroups(userId) {
+  async getUserGroups(userId) {
     const groups = await Conversation.findAll({
-        where: { type: 'group' },
-        include: [
+      where: { type: 'group' },
+      include: [
         {
-            model: Student,
-            as: 'participants',
-            required: true,
-            where: { id: userId },
-            through: { attributes: [] }
+          model: Student,
+          as: 'participants',
+          required: true,
+          where: { id: userId },
+          through: { attributes: [] }
         },
         {
-            model: Message,
-            as: 'messages',
-            limit: 1,
-            order: [['date_envoi', 'DESC']]
+          model: Message,
+          as: 'messages',
+          limit: 1,
+          order: [['date_envoi', 'DESC']]
         }
-        ],
-        order: [[{ model: Message, as: 'messages' }, 'date_envoi', 'DESC']]
+      ],
+      order: [[{ model: Message, as: 'messages' }, 'date_envoi', 'DESC']]
     });
 
     return groups.map(group => ({
-        id: group.id_conv,
-        name: group.nom || 'Groupe',
-        avatar: null, // optionnel
-        lastMessage: group.messages[0]?.contenu || '',
-        type: 'group'
+      id: group.id_conv,
+      name: group.nom || 'Groupe',
+      avatar: null,
+      lastMessage: group.messages[0]?.contenu || '',
+      type: 'group'
     }));
+  },
+
+  // Compter les messages non lus pour un utilisateur
+  async getUnreadMessagesCount(userId) {
+    // Récupérer toutes les conversations de l'utilisateur
+    const conversations = await Conversation.findAll({
+      include: [
+        {
+          model: Student,
+          as: 'participants',
+          where: { id: userId },
+          required: true,
+          through: { attributes: [] }
+        }
+      ]
+    });
+
+    const conversationIds = conversations.map(c => c.id_conv);
+
+    // Compter les messages non lus (envoyés par d'autres)
+    const unreadCount = await Message.count({
+      where: {
+        conversationId: { [Op.in]: conversationIds },
+        expediteurId: { [Op.ne]: userId },
+        etat: 'envoye'
+      }
+    });
+
+    return unreadCount;
+  },
+
+  // Créer un groupe (réservé aux alumni)
+  async createGroup(adminId, { nom, description, avatar_url, memberIds }) {
+    const Group = require('../models/Group');
+
+    // Vérifier que l'admin est bien un alumni
+    const admin = await User.findByPk(adminId);
+    if (!admin || admin.role !== 'alumni') {
+      throw new Error("Seuls les alumni peuvent créer des groupes");
     }
 
+    // Créer la conversation du groupe
+    const conversation = await Conversation.create({
+      type: 'groupe',
+      date_creation: new Date()
+    });
+
+    // Créer le groupe
+    const group = await Group.create({
+      nom,
+      description: description || null,
+      avatar_url: avatar_url || null,
+      adminId,
+      conversationId: conversation.id_conv,
+      actif: true
+    });
+
+    // Ajouter l'admin comme participant
+    await conversation.addParticipants([adminId]);
+
+    // Ajouter les membres sélectionnés
+    if (memberIds && memberIds.length > 0) {
+      await conversation.addParticipants(memberIds);
+    }
+
+    return {
+      group,
+      conversation
+    };
+  },
+
+  // Rechercher des étudiants pour un groupe
+  async searchStudents(query, filters = {}) {
+    const { specialite, interests } = filters;
+    
+    const whereClause = {
+      verification_status: 'verifie'
+    };
+
+    if (specialite) {
+      whereClause.specialite = specialite;
+    }
+
+    if (interests && interests.length > 0) {
+      whereClause.centres_interet = {
+        [Op.overlap]: interests
+      };
+    }
+
+    const students = await Student.findAll({
+      where: whereClause,
+      include: [
+        {
+          model: User,
+          as: 'user',
+          attributes: ['id', 'nom', 'prenom', 'avatar_url', 'role'],
+          where: {
+            account_status: 'active',
+            [Op.or]: [
+              { nom: { [Op.iLike]: `%${query}%` } },
+              { prenom: { [Op.iLike]: `%${query}%` } }
+            ]
+          }
+        }
+      ],
+      limit: 50
+    });
+
+    return students.map(student => ({
+      id: student.id,
+      name: `${student.user.prenom} ${student.user.nom}`,
+      avatar: student.user.avatar_url,
+      specialite: student.specialite,
+      interests: student.centres_interet
+    }));
+  }
 };
 
 module.exports = conversationService;
