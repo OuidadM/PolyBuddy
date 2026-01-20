@@ -1,6 +1,5 @@
 /* ==== GLOBAL ==== */
 .create-container {
-  min-height: 100vh;              /* clé absolue */
   width: 100%;
   background: #1D3039;
   display: flex;

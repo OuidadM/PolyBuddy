@@ -54,7 +54,6 @@ const conversationService = {
 
   // Créer ou récupérer une conversation directe entre deux utilisateurs
   async getOrCreateDirectConversation(user1Id, user2Id) {
-    // Chercher une conversation existante
     const existingConv = await Conversation.findOne({
       where: { type: 'direct' },
       include: [
@@ -73,13 +72,11 @@ const conversationService = {
       return existingConv;
     }
 
-    // Créer une nouvelle conversation
     const newConv = await Conversation.create({
       type: 'direct',
       date_creation: new Date()
     });
 
-    // Ajouter les participants
     await newConv.addParticipants([user1Id, user2Id]);
 
     return newConv;
@@ -153,7 +150,6 @@ const conversationService = {
 
   // Récupérer les messages d'une conversation
   async getConversationMessages(conversationId, userId) {
-    // Vérifier que l'utilisateur fait partie de la conversation
     const conversation = await Conversation.findByPk(conversationId, {
       include: [
         {
@@ -203,7 +199,6 @@ const conversationService = {
 
   // Envoyer un message
   async sendMessage(conversationId, userId, contenu) {
-    // Vérifier que l'utilisateur fait partie de la conversation
     const conversation = await Conversation.findByPk(conversationId, {
       include: [
         {
@@ -247,7 +242,7 @@ const conversationService = {
   // Récupérer les groupes de l'utilisateur
   async getUserGroups(userId) {
     const groups = await Conversation.findAll({
-      where: { type: 'group' },
+      where: { type: 'groupe' }, // ✅ FIX: 'groupe' au lieu de 'group'
       include: [
         {
           model: Student,
@@ -259,25 +254,24 @@ const conversationService = {
         {
           model: Message,
           as: 'messages',
+          separate: true, // ✅ FIX: Permet d'utiliser limit et order
           limit: 1,
           order: [['date_envoi', 'DESC']]
         }
-      ],
-      order: [[{ model: Message, as: 'messages' }, 'date_envoi', 'DESC']]
+      ]
     });
 
     return groups.map(group => ({
       id: group.id_conv,
       name: group.nom || 'Groupe',
-      avatar: null,
-      lastMessage: group.messages[0]?.contenu || '',
-      type: 'group'
+      avatar: group.avatar_url || null, // ✅ FIX: Ajout de l'avatar si disponible
+      lastMessage: group.messages && group.messages[0] ? group.messages[0].contenu : '',
+      type: 'groupe'
     }));
   },
 
   // Compter les messages non lus pour un utilisateur
   async getUnreadMessagesCount(userId) {
-    // Récupérer toutes les conversations de l'utilisateur
     const conversations = await Conversation.findAll({
       include: [
         {
@@ -292,7 +286,6 @@ const conversationService = {
 
     const conversationIds = conversations.map(c => c.id_conv);
 
-    // Compter les messages non lus (envoyés par d'autres)
     const unreadCount = await Message.count({
       where: {
         conversationId: { [Op.in]: conversationIds },
@@ -305,7 +298,7 @@ const conversationService = {
   },
 
   // Créer un groupe (réservé aux alumni)
-  async createGroup(adminId, { nom, description, avatar_url, memberIds }) {
+  async createGroup(adminId, { nom, description, avatar, members }) {
     const Group = require('../models/Group');
 
     // Vérifier que l'admin est bien un alumni
@@ -317,6 +310,7 @@ const conversationService = {
     // Créer la conversation du groupe
     const conversation = await Conversation.create({
       type: 'groupe',
+      nom,
       date_creation: new Date()
     });
 
@@ -324,7 +318,7 @@ const conversationService = {
     const group = await Group.create({
       nom,
       description: description || null,
-      avatar_url: avatar_url || null,
+      avatar_url: avatar || null,
       adminId,
       conversationId: conversation.id_conv,
       actif: true
@@ -334,8 +328,8 @@ const conversationService = {
     await conversation.addParticipants([adminId]);
 
     // Ajouter les membres sélectionnés
-    if (memberIds && memberIds.length > 0) {
-      await conversation.addParticipants(memberIds);
+    if (members && members.length > 0) {
+      await conversation.addParticipants(members);
     }
 
     return {
@@ -344,38 +338,54 @@ const conversationService = {
     };
   },
 
-  // Rechercher des étudiants pour un groupe
+  // ✅ NOUVELLE VERSION - Rechercher des étudiants avec filtres complets
   async searchStudents(query, filters = {}) {
-    const { specialite, interests } = filters;
+    const { role, specialite, niveau, gender } = filters;
     
-    const whereClause = {
+    // Clause WHERE pour Student
+    const studentWhere = {
       verification_status: 'verifie'
     };
 
     if (specialite) {
-      whereClause.specialite = specialite;
+      studentWhere.specialite = specialite.toLowerCase();
     }
 
-    if (interests && interests.length > 0) {
-      whereClause.centres_interet = {
-        [Op.overlap]: interests
-      };
+    if (niveau) {
+      studentWhere.niveau = parseInt(niveau);
+    }
+
+    // Clause WHERE pour User
+    const userWhere = {
+      account_status: 'active',
+      [Op.or]: [
+        { nom: { [Op.iLike]: `%${query}%` } },
+        { prenom: { [Op.iLike]: `%${query}%` } }
+      ]
+    };
+
+    if (role) {
+      userWhere.role = role;
+    }
+
+    if (gender) {
+      userWhere.gender = gender;
     }
 
     const students = await Student.findAll({
-      where: whereClause,
+      where: studentWhere,
       include: [
         {
           model: User,
           as: 'user',
-          attributes: ['id', 'nom', 'prenom', 'avatar_url', 'role'],
-          where: {
-            account_status: 'active',
-            [Op.or]: [
-              { nom: { [Op.iLike]: `%${query}%` } },
-              { prenom: { [Op.iLike]: `%${query}%` } }
-            ]
-          }
+          attributes: ['id', 'nom', 'prenom', 'avatar_url', 'role', 'gender'],
+          where: userWhere
+        },
+        {
+          model: Alumni,
+          as: 'alumni',
+          attributes: ['position', 'entreprise'],
+          required: false
         }
       ],
       limit: 50
@@ -383,10 +393,15 @@ const conversationService = {
 
     return students.map(student => ({
       id: student.id,
-      name: `${student.user.prenom} ${student.user.nom}`,
-      avatar: student.user.avatar_url,
+      nom: student.user.nom,
+      prenom: student.user.prenom,
+      avatar_url: student.user.avatar_url,
+      role: student.user.role,
       specialite: student.specialite,
-      interests: student.centres_interet
+      niveau: student.niveau,
+      gender: student.user.gender,
+      position: student.alumni?.position,
+      entreprise: student.alumni?.entreprise
     }));
   }
 };
