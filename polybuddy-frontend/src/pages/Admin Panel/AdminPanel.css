@@ -1,17 +1,3 @@
-/* ✅ Au début du fichier */
-body {
-  background: #1d3039 !important;
-  min-height: 100vh;
-}
-
-.admin-container {
-  min-height: 100vh;
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 40px 20px;
-  background: transparent; /* ✅ Pas de background ici */
-}
-
 :root {
   --primary-blue: #2563eb;
   --bg-gray: #f3f4f6;
@@ -19,20 +5,18 @@ body {
   --red-btn: #f44336;
   --border-color: #e5e7eb;
 }
-
-/* ✅ ARRIÈRE-PLAN DARK BLUE */
+body, html, .admin-page {
+  color: black;
+}
 .admin-container {
-  background: #1d3039; /* ✅ Dark blue comme Polybuddy */
-  min-height: 100vh;
   max-width: 1100px;
   margin: 0 auto;
-  padding: 40px 20px;
 }
 
 .admin-header h1 {
   font-size: 1.2rem;
   margin-bottom: 25px;
-  color: white; /* ✅ Texte blanc sur fond dark */
+  color: white;
 }
 
 .filter-tabs {
@@ -51,7 +35,6 @@ body {
   cursor: pointer;
   font-weight: 500;
   transition: 0.3s;
-  color: #374151;
 }
 
 .filter-tabs button.active {
@@ -59,15 +42,10 @@ body {
   color: white;
 }
 
-.filter-tabs button:hover {
-  background: rgba(37, 99, 235, 0.1);
-}
-
-/* ✅ TABLEAU BLANC */
 .table-wrapper {
-  background: white; /* ✅ Tableau reste blanc */
+  background: white;
   border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
   overflow: hidden;
 }
 
@@ -88,7 +66,6 @@ body {
 .admin-table td {
   padding: 12px 15px;
   border-bottom: 1px solid var(--border-color);
-  color: #333;
 }
 
 .user-cell {
@@ -106,16 +83,11 @@ body {
   font-size: 0.8rem;
   background: #f3f4f6;
   border: 1px solid #ddd;
-  color: #374151;
 }
 
 .email-link {
   color: var(--primary-color);
   text-decoration: none;
-}
-
-.email-link:hover {
-  text-decoration: underline;
 }
 
 .action-btns {
@@ -129,39 +101,16 @@ body {
   border-radius: 4px;
   color: white;
   cursor: pointer;
-  transition: 0.3s;
 }
 
-.btn-accept { 
-  background: var(--green-btn); 
-}
-
-.btn-accept:hover {
-  background: #45a049;
-}
-
-.btn-refuse { 
-  background: var(--red-btn); 
-}
-
-.btn-refuse:hover {
-  background: #da190b;
-}
+.btn-accept { background: var(--green-btn); }
+.btn-refuse { background: var(--red-btn); }
 
 .icon-btn {
   background: none;
   border: none;
   font-size: 1.1rem;
   cursor: pointer;
-  transition: transform 0.2s;
-}
-
-.icon-btn:hover {
-  transform: scale(1.2);
-}
-
-.row-selected {
-  background: #f8fafc;
 }
 
 .detail-row {
@@ -180,15 +129,39 @@ body {
 .details-content li {
   margin-bottom: 8px;
   font-size: 0.9rem;
-  color: #374151;
 }
 
-.details-content strong {
-  color: #1f2937;
+/* Modale */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
+.modal-content {
+  background: white;
+  width: 500px;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.placeholder-doc {
+  height: 200px;
+  background: #eee;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+  border: 2px dashed #ccc;
+}
+
+/* Ajoutez ces styles à votre AdminPanel.css existant */
 
 /* ================================
-   MODAL STYLES (BLANC)
+   AMÉLIORATION DU MODAL UNIQUEMENT
 ================================ */
 
 .modal-overlay {
@@ -206,7 +179,7 @@ body {
 }
 
 .modal-content {
-  background: white; /* ✅ Modal blanc */
+  background: white;
   border-radius: 12px;
   width: 90%;
   max-width: 900px;
@@ -229,11 +202,11 @@ body {
   margin: 0;
   font-size: 18px;
   color: #2c3e50;
-  font-weight: 400;
+  font-weight: 400; /* ✅ Font weight réduit */
 }
 
 .modal-body {
-  padding: 20px;
+  padding: 20px; /* ✅ Marge entre titre et contenu */
   background: #ffffff;
   overflow: auto;
   max-height: calc(85vh - 80px);
@@ -242,17 +215,10 @@ body {
 /* Boutons de zoom */
 .zoom-btn {
   transition: all 0.2s ease;
-  padding: 5px 10px;
-  background: #f0f0f0;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 18px;
-  color: #333;
 }
 
 .zoom-btn:hover {
-  background: #e0e0e0;
+  background: #e0e0e0 !important;
   transform: translateY(-1px);
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
@@ -261,7 +227,7 @@ body {
   transform: translateY(0);
 }
 
-/* Bouton fermer */
+/* Bouton fermer amélioré */
 .close-btn {
   font-size: 28px;
   font-weight: 300;
@@ -279,7 +245,7 @@ body {
   transform: rotate(90deg);
 }
 
-/* Scrollbar personnalisée */
+/* Scrollbar personnalisée pour modal-body */
 .modal-body::-webkit-scrollbar {
   width: 8px;
 }
@@ -319,7 +285,7 @@ body {
   }
 }
 
-/* Placeholder */
+/* Placeholder amélioré */
 .placeholder-doc {
   display: flex;
   align-items: center;
@@ -333,15 +299,7 @@ body {
   border: 2px dashed #ccc;
 }
 
-/* Zoom level indicator */
-.modal-header span {
-  font-size: 14px;
-  color: #666;
-  min-width: 50px;
-  text-align: center;
-}
-
-/* Responsive */
+/* Responsive pour les petits écrans */
 @media (max-width: 768px) {
   .modal-content {
     width: 95%;
@@ -361,9 +319,5 @@ body {
   .zoom-btn {
     padding: 4px 8px !important;
     font-size: 14px !important;
-  }
-
-  .admin-container {
-    padding: 20px 10px;
   }
 }

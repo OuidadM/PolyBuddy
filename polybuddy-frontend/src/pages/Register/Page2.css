@@ -1,20 +1,18 @@
 /* ===== GLOBAL ===== */
 .acces-container {
-  height: 100vh;
   width: 100%;
   background: #1D3039;
   display: flex;
   align-items: flex-start;      /* IMPORTANT : comme RegisterPhase2 */
   justify-content: center;
   position: relative;
-  overflow: hidden;
   font-family: 'Nunito', sans-serif;
   padding-top: 40px;            /* EXACTEMENT comme RegisterPhase2 */
+  padding-bottom: 40px;
 }
 
 /* PAGE WRAPPER */
 .register-page {
-  min-height: 100vh;              /* clé absolue */
   width: 100%;
   background: #1D3039;
   display: flex;

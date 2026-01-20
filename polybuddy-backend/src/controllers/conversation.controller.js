@@ -179,7 +179,7 @@ const conversationController = {
       console.error("Erreur récupération groupes:", error);
       return res.status(500).json({
         success: false,
-        message: "Erreur lors de la récupération des groupes"
+        message: `Erreur lors de la récupération des groupes ${error}`
       });
     }
   },
@@ -204,68 +204,77 @@ const conversationController = {
   },
 
   // Créer un groupe (alumni uniquement)
-async createGroup(req, res) {
-  try {
-    const adminId = req.user.id;
-    const { nom, description, avatar_url, memberIds } = req.body;
+  async createGroup(req, res) {
+    try {
+      const adminId = req.user.id;
+      const { nom, description, avatar, members } = req.body;
 
-    if (!nom) {
-      return res.status(400).json({
+      if (!nom) {
+        return res.status(400).json({
+          success: false,
+          message: "Le nom du groupe est requis"
+        });
+      }
+
+      const result = await conversationService.createGroup(adminId, {
+        nom,
+        description,
+        avatar,
+        members
+      });
+
+      return res.status(201).json({
+        success: true,
+        data: result
+      });
+    } catch (error) {
+      console.error("Erreur création groupe:", error);
+
+      if (error.message.includes("alumni")) {
+        return res.status(403).json({
+          success: false,
+          message: error.message
+        });
+      }
+
+      return res.status(500).json({
         success: false,
-        message: "Le nom du groupe est requis"
+        message: "Erreur lors de la création du groupe"
       });
     }
+  },
 
-    const result = await conversationService.createGroup(adminId, {
-      nom,
-      description,
-      avatar_url,
-      memberIds
-    });
+  // ✅ MODIFIÉ - Rechercher des étudiants avec filtres complets
+  async searchStudents(req, res) {
+    try {
+      const { query, role, specialite, niveau, gender } = req.query;
 
-    return res.status(201).json({
-      success: true,
-      data: result
-    });
-  } catch (error) {
-    console.error("Erreur création groupe:", error);
+      if (!query || query.trim() === '') {
+        return res.status(400).json({
+          success: false,
+          message: "Le paramètre de recherche est requis"
+        });
+      }
 
-    return res.status(403).json({
-      success: false,
-      message: error.message || "Erreur lors de la création du groupe"
-    });
-  }
-},
-  // Rechercher des étudiants
-async searchStudents(req, res) {
-  try {
-    const { query, specialite, interests } = req.query;
+      const students = await conversationService.searchStudents(query, {
+        role,
+        specialite,
+        niveau,
+        gender
+      });
 
-    if (!query || query.trim() === '') {
-      return res.status(400).json({
+      return res.status(200).json({
+        success: true,
+        data: students
+      });
+    } catch (error) {
+      console.error("Erreur recherche étudiants:", error);
+      return res.status(500).json({
         success: false,
-        message: "Le paramètre de recherche est requis"
+        message: "Erreur lors de la recherche des étudiants"
       });
     }
-
-    const students = await conversationService.searchStudents(query, {
-      specialite,
-      interests: interests ? interests.split(',') : []
-    });
-
-    return res.status(200).json({
-      success: true,
-      data: students
-    });
-  } catch (error) {
-    console.error("Erreur recherche étudiants:", error);
-    return res.status(500).json({
-      success: false,
-      message: "Erreur lors de la recherche des étudiants"
-    });
   }
-}
-
 };
 
 module.exports = conversationController;

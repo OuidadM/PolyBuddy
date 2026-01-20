@@ -42,20 +42,20 @@ const Messaging = () => {
     }
   }, [location.state]);
 
-  
-
   useEffect(() => {
     loadFriends();
     loadGroups();
   }, []);
 
+  // ✅ FIX: Extraire response.data
   const loadGroups = async () => {
     try {
       setLoadingGroups(true);
       const response = await conversationService.getGroups();
-      setGroups(response || []);
+      setGroups(response.data || []); // ✅ FIX: response.data au lieu de response
     } catch (e) {
       console.error("Erreur chargement groupes", e);
+      setGroups([]); // ✅ FIX: Assurer que groups est toujours un tableau
     } finally {
       setLoadingGroups(false);
     }
@@ -69,6 +69,7 @@ const Messaging = () => {
       setFriends(response.data || []);
     } catch (error) {
       console.error("Erreur chargement amis:", error);
+      setFriends([]); // ✅ AJOUTÉ: Protection
     } finally {
       setLoadingFriends(false);
     }
@@ -122,6 +123,7 @@ const Messaging = () => {
       await conversationService.markAsRead(conversationId);
     } catch (error) {
       console.error("Erreur chargement messages:", error);
+      setMessages([]); // ✅ AJOUTÉ: Protection
     }
   };
 

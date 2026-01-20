@@ -1,6 +1,6 @@
 /* PAGE WRAPPER */
 .register-page {
-  min-height: 100vh;              
+  min-height: auto;              
   width: 100%;
   background: #1D3039;
   display: flex;
